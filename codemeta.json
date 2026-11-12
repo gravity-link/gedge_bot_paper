@@ -5,6 +5,12 @@
   "description": "Benchmark, replay, static-audit and analysis scripts plus measured evidence records accompanying arXiv:2611.11698.",
   "version": "1.0.0",
   "dateCreated": "2026-11-12",
+  "identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "DOI",
+    "value": "10.5281/zenodo.24152092"
+  },
+  "downloadUrl": "https://zenodo.org/records/24152092/files/gedge_bot_paper-v1.0.0.zip",
   "license": [
     "https://spdx.org/licenses/MIT.html",
     "https://creativecommons.org/licenses/by/4.0/"

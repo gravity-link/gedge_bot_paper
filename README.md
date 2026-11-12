@@ -72,12 +72,16 @@ Please cite the paper, not this repository. A ready-made citation is in
 The arXiv v1 manuscript states that no public artifact repository is asserted.
 A v2 replacement package has been prepared that replaces that sentence with a
 Data/Code Availability statement pointing to this repository at release
-`v1.0.0`, and adds the repository URL to the submission Comments. Until that
-replacement is announced, arXiv v1 remains the public version. A Zenodo version
-DOI has not been minted: minting one requires the maintainer's own Zenodo
-account authorization, so `CITATION.cff` deliberately carries no software DOI.
-If a version DOI is minted later, cite that record; until then cite the
-paper's arXiv DOI and pin release `v1.0.0`. Several physical experiments listed
-in the manuscript's reproduction plan remain open; the evidence JSON flags
-which results are measured, contract-derived or replay-only.
+`v1.0.0` and to the Zenodo version DOI `10.5281/zenodo.24152092`, and adds both
+links to the submission Comments. Until that replacement is announced, arXiv v1
+remains the public version.
+
+The artifact archive is published on Zenodo
+(doi:[10.5281/zenodo.24152092](https://doi.org/10.5281/zenodo.24152092),
+<https://zenodo.org/records/24152092>, version 1.0.0, Software, Open).
+`CITATION.cff` now carries the software version DOI; the concept DOI
+`10.5281/zenodo.24152091` always resolves to the latest version. Please keep
+citing the paper itself for the research claims. Several physical experiments
+listed in the manuscript's reproduction plan remain open; the evidence JSON
+flags which results are measured, contract-derived or replay-only.
 
