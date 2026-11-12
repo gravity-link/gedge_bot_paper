@@ -1,0 +1,27 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\footnotesize, >=Latex,
+  box/.style={draw, rounded corners=1pt, align=center, text width=6.5cm,
+              inner sep=3pt, minimum height=7mm},
+  gate/.style={box, fill=blue!7},
+  act/.style={box, fill=green!8},
+  deg/.style={draw, dashed, rounded corners=1pt, align=left, text width=6.5cm,
+              inner sep=3pt, font=\scriptsize, fill=orange!6},
+  node distance=2.6mm]
+\node[gate] (pre) {Idle prewarm: voice subprocess held idle $\parallel$ camera/YOLO daemon thread\\ two 60\,s readiness gates};
+\node[act, below=of pre] (wait) {Wait for next DOA angle (\code{wait\_for\_next\_angle})};
+\node[act, below=of wait] (orient) {Sound orientation: head pre-turn $\to$ body command\\ $\to$ counter-head callback after the write};
+\node[act, below=of orient] (voice) {Qt UI trigger; voice \code{start()} via SIGUSR1};
+\node[act, below=of voice] (follow) {Visual following (\code{follow\_loop}, 120\,s cap,\\ 0.30\,s minimum command spacing)};
+\node[gate, below=of follow] (stop) {Voice \code{stop()} via SIGUSR2; 0.5\,s mic flush;\\ return to waiting};
+\draw[->] (pre) -- (wait);
+\draw[->] (wait) -- (orient);
+\draw[->] (orient) -- (voice);
+\draw[->] (voice) -- (follow);
+\draw[->] (follow) -- (stop);
+\draw[->] (stop.east) -- ++(0.32,0) |- (wait.east);
+\node[deg, below=3.5mm of stop] (degraded) {Degraded branches in the audited source: either readiness gate fails (proceed degraded), API-vision latency warning, no recent angle, $15^\circ$ DOA dead zone, detector dropout, \code{enable\_motors=False} dry-run, and \code{--skip-sound-head}. A failed camera readiness gate does not block \code{follow\_loop}.};
+\end{tikzpicture}
+\caption{Overall control state machine of the audited \code{RobotControl/robot\_runtime.py} \code{auto-wakeup} mode. The prewarm and readiness barrier sit outside the trigger-to-follow path; the box-plus-robot integration is what introduces the concurrent voice process, camera thread, HTTP monitor, microphone array and seven-byte actuator boundary that this state machine orchestrates. Source-derived structure, not a runtime trace.}
+\label{fig:control}
+\end{figure}

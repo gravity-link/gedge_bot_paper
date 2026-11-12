@@ -1,0 +1,48 @@
+{
+  "schema": "gedgebot.known_hash_drift.v1",
+  "description": "Historical script_sha256 drift present in the original evidence records. These are NOT modified: the JSON files keep their recorded hashes. Any new, unlisted drift fails tools/check_public_release.py.",
+  "entries": [
+    {
+      "file": "evidence/rebuilt/bench_ai_run1.json",
+      "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_ai.py",
+      "recorded_sha256": "fc1bd2f70c93b124bcbf1141f5d5cf8ea9a170114e104e4a65612d421a30b6db",
+      "shipped_sha256": "d1c4a8b539da61a1088e872f3871a0a8edbdc730f7667b119e8f13f599f9b20a",
+      "reason": "Reconstructed local probe generated 2026-11-07T08:55Z against an early script revision; the shipped script is the later final revision. evidence_status=local_probe_no_measurement, not citable as an experimental measurement."
+    },
+    {
+      "file": "evidence/rebuilt/bench_ai_run2.json",
+      "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_ai.py",
+      "recorded_sha256": "fc1bd2f70c93b124bcbf1141f5d5cf8ea9a170114e104e4a65612d421a30b6db",
+      "shipped_sha256": "d1c4a8b539da61a1088e872f3871a0a8edbdc730f7667b119e8f13f599f9b20a",
+      "reason": "Reconstructed local probe generated 2026-11-07T08:55Z against an early script revision; the shipped script is the later final revision. evidence_status=local_probe_no_measurement, not citable as an experimental measurement."
+    },
+    {
+      "file": "evidence/rebuilt/bench_ai_run3.json",
+      "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_ai.py",
+      "recorded_sha256": "fc1bd2f70c93b124bcbf1141f5d5cf8ea9a170114e104e4a65612d421a30b6db",
+      "shipped_sha256": "d1c4a8b539da61a1088e872f3871a0a8edbdc730f7667b119e8f13f599f9b20a",
+      "reason": "Reconstructed local probe generated 2026-11-07T08:55Z against an early script revision; the shipped script is the later final revision. evidence_status=local_probe_no_measurement, not citable as an experimental measurement."
+    },
+    {
+      "file": "evidence/rebuilt/bench_voice.json",
+      "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_voice.py",
+      "recorded_sha256": "fa9da857bdec3ee9e29ea32845b4f12862a5e24f18fdc6dbc7171bc1f465b7ef",
+      "shipped_sha256": "9c16f7754a4ca571c6fd21ce36bf98e37f801cd00488ce129993db7ab72a9620",
+      "reason": "Reconstructed local probe generated 2026-11-07T08:55Z against an early script revision; the shipped script is the later final revision. evidence_status=local_probe_no_measurement, not citable as an experimental measurement."
+    },
+    {
+      "file": "evidence/device/sensitivity_15W_20261107_113758.json",
+      "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/sensitivity_bench.py",
+      "recorded_sha256": "7570e51e4d391a448f72d3b8939b5ea1f7ce48db017f2317cf001a831c56b748",
+      "shipped_sha256": "5d19eeb1fb71757c391ff797c0935bf43da3d6945d3f521720e99d75e1459f24",
+      "reason": "Hash recorded on the Jetson device from a deployed copy under /mnt/nvme_data/gedge_bot_validation_20261107/; the shipped script is the final workspace revision after post-run fixes."
+    },
+    {
+      "file": "evidence/device/sensitivity_MAXN_20261107_113758.json",
+      "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/sensitivity_bench.py",
+      "recorded_sha256": "7570e51e4d391a448f72d3b8939b5ea1f7ce48db017f2317cf001a831c56b748",
+      "shipped_sha256": "5d19eeb1fb71757c391ff797c0935bf43da3d6945d3f521720e99d75e1459f24",
+      "reason": "Hash recorded on the Jetson device from a deployed copy under /mnt/nvme_data/gedge_bot_validation_20261107/; the shipped script is the final workspace revision after post-run fixes."
+    }
+  ]
+}

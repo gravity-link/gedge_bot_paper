@@ -1,0 +1,172 @@
+{
+  "schema": "gedgebot.failsafe.rebuilt.v1",
+  "generated_at_utc": "2026-11-07T10:01:45.601089+00:00",
+  "timestamp_unix": 1794045705.601136,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/failsafe_test.py",
+  "script_sha256": "4739c39dba18e01da3b75afb5089775ead0410ed844df09dd3a7d5f8e03efa19",
+  "mode": "device",
+  "evidence_status": "device_measurement",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "Reconstructed script, not a recovered October 2026 artifact. Local probe runs do not measure the robot or any AI model and must not be cited as experimental results.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MAXN\n0",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "physical_cases": {
+    "F1_control_crash": {
+      "status": "requires_onsite_confirmation",
+      "outcome": null,
+      "physical_injection_performed": false,
+      "required_operator_actions": [
+        "Confirm the chassis is raised or in a clear area.",
+        "Start a finite-pulse drive sequence under operator control.",
+        "Stop frame transmission mid-drive and observe wheel stop.",
+        "Record the observation in the --observations JSON."
+      ]
+    },
+    "F2_cable_pull": {
+      "status": "requires_onsite_confirmation",
+      "outcome": null,
+      "physical_injection_performed": false,
+      "required_operator_actions": [
+        "Confirm the chassis is raised or in a clear area.",
+        "Close the serial port / disconnect the cable mid-drive.",
+        "Observe wheel stop and record it in the --observations JSON."
+      ]
+    },
+    "F3_protocol_errors": {
+      "status": "offline_protocol_guard_check",
+      "outcome": "malformed inputs rejected by captured parsers",
+      "physical_injection_performed": false,
+      "cases_passed": 9,
+      "cases_total": 9
+    }
+  },
+  "protocol_checks": {
+    "status": "offline_protocol_guard_check",
+    "protocol": "captured seven-byte motor frame + captured mic-array parser",
+    "valid_motor_opcodes": [
+      1,
+      2,
+      9
+    ],
+    "runtime_path": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/evidence/robot_runtime.current.py",
+    "runtime_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+    "runtime_hash_matches_captured_snapshot": true,
+    "cases": [
+      {
+        "case": "valid_motor_frame",
+        "expected": "accepted",
+        "observed": "accepted",
+        "passed": true,
+        "detail": "AA 55 01 05 00 0D 0A"
+      },
+      {
+        "case": "garbage_bytes",
+        "expected": "length",
+        "observed": "length",
+        "passed": true,
+        "detail": "3 random bytes"
+      },
+      {
+        "case": "undefined_opcode_0x55",
+        "expected": "undefined_opcode",
+        "observed": "undefined_opcode",
+        "passed": true,
+        "detail": "AA 55 55 05 00 0D 0A"
+      },
+      {
+        "case": "bad_frame_tail",
+        "expected": "tail",
+        "observed": "tail",
+        "passed": true,
+        "detail": "AA 55 01 05 00 00 00"
+      },
+      {
+        "case": "bad_frame_header",
+        "expected": "header",
+        "observed": "header",
+        "passed": true,
+        "detail": "00 00 01 05 00 0D 0A"
+      },
+      {
+        "case": "mic_valid_doa_frame",
+        "expected": "angle_event",
+        "observed": "angle_event",
+        "passed": true,
+        "detail": "FF A5 01 00 05 82 02 5A 00 88"
+      },
+      {
+        "case": "mic_bad_checksum",
+        "expected": "rejected",
+        "observed": "rejected",
+        "passed": true,
+        "detail": "FF A5 01 00 05 82 02 5A 00 89"
+      },
+      {
+        "case": "mic_non_doa_frame",
+        "expected": "rejected",
+        "observed": "rejected",
+        "passed": true,
+        "detail": "intensity/status frame 0x81"
+      },
+      {
+        "case": "mic_out_of_range_angle",
+        "expected": "rejected",
+        "observed": "rejected",
+        "passed": true,
+        "detail": "angle=360 outside 0..359"
+      }
+    ],
+    "cases_passed": 9,
+    "cases_total": 9,
+    "physical_fault_injection_performed": false,
+    "spurious_motion_observed": null,
+    "note": "Passing these checks means malformed inputs are rejected by the captured parsers. It does NOT demonstrate that a physical robot produced no spurious motion."
+  },
+  "historical_failsafe": {
+    "F1_control_crash": "stop sending frames mid-drive; wheels stop after final pulse",
+    "F2_cable_pull": "close serial port mid-drive; wheels stop immediately",
+    "F3_protocol_errors": "garbage bytes / undefined opcode 0x55 / bad frame tail discarded",
+    "limitation": "no hardware watchdog or command timeout"
+  },
+  "safety_declaration": {
+    "serial_device_opened": false,
+    "motor_frames_sent_to_hardware": 0,
+    "cable_or_process_intervention": false,
+    "statement": "This script never actuates the robot in any automatic mode."
+  },
+  "errors": []
+}

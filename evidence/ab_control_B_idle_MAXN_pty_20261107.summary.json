@@ -1,0 +1,29 @@
+{
+  "schema": "gedgebot.ab_control.no_motion.v1",
+  "condition": "B_idle_MAXN_pty_20261107",
+  "timestamp_unix": 1794015618.4743195,
+  "physical_motor_writes": false,
+  "transport": "POSIX pseudo-terminal; os.write only, no tcdrain or physical UART",
+  "frame_hex": "AA 55 01 05 00 0D 0A",
+  "frames_sent": 201,
+  "frames_received": 201,
+  "payload_verification": "exact frame sequence",
+  "runtime_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+  "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+  "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+  "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+  "power_mode": "NV Power Mode: MAXN\n0",
+  "yolo_load": null,
+  "summary": {
+    "interval_count": 200,
+    "period_ms": 50.0,
+    "interval_mean_ms": 49.999996110000005,
+    "interval_std_ms": 0.21639562656772418,
+    "interval_p50_ms": 50.000244,
+    "interval_p99_ms": 50.109529,
+    "jitter_p99_abs_deviation_ms": 0.24610299999999796,
+    "jitter_max_abs_deviation_ms": 2.153680999999999,
+    "max_interval_ms": 52.136408,
+    "min_interval_ms": 47.846319
+  }
+}

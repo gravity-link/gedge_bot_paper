@@ -1,0 +1,111 @@
+{
+  "schema": "gedgebot.bench_voice.rebuilt.v1",
+  "generated_at_utc": "2026-11-07T10:10:26.444838+00:00",
+  "timestamp_unix": 1794046226.4449,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/bench_voice.py",
+  "script_sha256": "9c16f7754a4ca571c6fd21ce36bf98e37f801cd00488ce129993db7ab72a9620",
+  "mode": "device",
+  "evidence_status": "device_measurement_partial",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "New device measurement produced by the reconstructed script, not a recovered October run. Review before citing.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MODE_15W_DESKTOP\n7",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "condition": {
+    "model_paths": {
+      "whisper": "/root/gedge_bot_validation_20261107/models/whisper-small",
+      "nllb": "/root/src/sample/models/nllb-200"
+    },
+    "audio": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+    "text_chars": 63
+  },
+  "stages": {
+    "asr": {
+      "status": "ok",
+      "value": {
+        "audio_path": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+        "audio_duration_s": 10.0,
+        "processing_s": 20.472542596049607,
+        "rtf": 2.0472542596049608,
+        "transcript_chars": 444,
+        "transcript": null,
+        "note": "transcript text deliberately not persisted in evidence JSON"
+      },
+      "reason": null
+    },
+    "mt": {
+      "status": "ok",
+      "value": {
+        "source_chars": 444,
+        "latency_s": 2.548159461002797,
+        "output_tokens": 65,
+        "decoding": "greedy",
+        "dtype": "fp16"
+      },
+      "reason": null
+    },
+    "tts": {
+      "status": "unavailable",
+      "value": null,
+      "reason": "ChatTTS unavailable: ModuleNotFoundError: No module named 'vocos'"
+    }
+  },
+  "end_to_end": {
+    "status": "incomplete",
+    "wall_clock_s": null,
+    "stages_complete": [
+      "asr",
+      "mt"
+    ],
+    "conversation_verified": false,
+    "note": "A complete stage chain is not proof of a spoken dialogue; the October demonstrations ran with voice=False."
+  },
+  "voice_assistant_ready": null,
+  "offline_status": {
+    "hf_hub_offline": "1",
+    "local_files_only": true,
+    "cloud_calls_observed": null,
+    "note": "Offline status is asserted from configuration, not from packet capture. It must not be reported as 'fully offline' without checking the actual assistant configuration."
+  },
+  "historical_bench_voice": {
+    "asr": "Whisper-small",
+    "mt": "NLLB-200 greedy fp16",
+    "tts": "ChatTTS",
+    "note": "Voice assistant failed to warm up within 60 s during the N=6 October demonstrations (voice=False degraded mode). No conversational latency was measured in those runs."
+  },
+  "errors": [],
+  "measurement_attempted": true
+}

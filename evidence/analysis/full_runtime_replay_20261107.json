@@ -1,0 +1,5445 @@
+{
+  "schema": "gedgebot.full_runtime_replay.v1",
+  "generated_at_utc": "2026-11-07T14:19:11.693367+00:00",
+  "script": "/Users/henryluo/lobsterai/project/paper/scripts/full_runtime_replay.py",
+  "script_sha256": "db4db4986ff4ab21a13ba10b77109eddba9f354c75e54902063af04ec03a1365",
+  "evidence_status": "full_runtime_software_in_the_loop_replay",
+  "device_measurement": false,
+  "physical_actuation": false,
+  "no_physical_demonstration": true,
+  "citation_allowed": false,
+  "evidence_note": "Executes the real main() dispatcher and real run_* / run_auto_wakeup control methods from the audited source, with all peripherals replaced by recording stubs and a virtual clock. DOA seeds are transcribed historical turn angles; face streams are synthetic probes. No serial/camera/microphone/voice process or HTTP service was opened, and no motor frame reached hardware. Timings are source-derived virtual budgets, not wall-clock measurements. Not a physical demonstration, not a dialogue success rate, and not a reproduction of the October N=6 runs.",
+  "environment": {
+    "platform": "macOS-15.8.1-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64",
+    "python": "3.13.12 (main, Feb  4 2026, 00:40:20) [Clang 21.1.4 ]",
+    "hostname": "MacBook-Pro.local",
+    "is_jetson": false
+  },
+  "inputs": {
+    "runtime_path": "/Users/henryluo/lobsterai/project/paper/evidence/robot_runtime.current.py",
+    "runtime_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+    "firmware_path": "/Users/henryluo/lobsterai/project/paper/evidence/motor_uart_vision.current.c",
+    "firmware_sha256": "978d551c8655385f585e014a08b910f89332085d4a0ac5b71934c99bd6f7885e",
+    "remote_path": "/root/src/gedge_bot/RobotControl/robot_runtime.py",
+    "source_commit": "c25b444",
+    "doa_seed_angles_deg": [
+      90,
+      -53,
+      104,
+      110,
+      -97,
+      114
+    ],
+    "face_stream_nominal_len": 32,
+    "face_stream_dropout_len": 28,
+    "face_window_frames": 24
+  },
+  "guardrails": {
+    "guarded_source_methods": [
+      "TermiosSerial.open",
+      "CameraFaceTracker.open",
+      "CameraFaceTracker.start",
+      "MonitorServer.start",
+      "VisionAPIClient.detect",
+      "VoiceAssistantProcess.prewarm",
+      "VoiceAssistantProcess.wait_until_ready",
+      "VoiceAssistantProcess.start",
+      "VoiceAssistantProcess.stop",
+      "VoiceAssistantProcess.shutdown",
+      "VoiceAssistantProcess._start_log_reader",
+      "subprocess.Popen"
+    ],
+    "wrapped_real_control_methods": [
+      "run_mic",
+      "run_motor_test",
+      "run_sound_once",
+      "run_follow",
+      "run_stdin_wakeup",
+      "run_auto_wakeup",
+      "follow_loop",
+      "flush_mic_array",
+      "open_camera_async",
+      "start_monitor_if_enabled",
+      "orient_to_sound",
+      "trigger_qt_voice_dialog",
+      "_wait_camera_ready"
+    ],
+    "virtual_clock": "mod.time replaced; only sleeps present in source advance it",
+    "network": "urllib.request.urlopen replaced by an in-memory 200 response",
+    "select": "select.select replaced by an always-readable stub",
+    "stdin": "io.StringIO with scripted operator lines"
+  },
+  "summary": {
+    "scenarios_total": 14,
+    "scenarios_completed": 14,
+    "modes_covered": [
+      "auto-wakeup",
+      "follow",
+      "mic",
+      "motor-test",
+      "sound-once",
+      "stdin-wakeup"
+    ],
+    "modes_total": 6,
+    "frames_total": 54,
+    "contract_errors_total": 0,
+    "physical_device_open_attempts_total": 0,
+    "logical_device_opens_total": 33,
+    "follow_windows_total": 14,
+    "auto_wakeup_cycles_total": 10,
+    "counter_head_frames_total": 10,
+    "distinct_state_transitions": 48,
+    "state_transition_pairs": [
+      "camera.logical_close",
+      "camera.logical_open",
+      "camera.readiness_gate",
+      "control._wait_camera_ready_enter",
+      "control._wait_camera_ready_exit",
+      "control.flush_mic_array_enter",
+      "control.flush_mic_array_exit",
+      "control.follow_loop_enter",
+      "control.follow_loop_exit",
+      "control.follow_window_exhausted",
+      "control.open_camera_async_enter",
+      "control.open_camera_async_exit",
+      "control.orient_to_sound_enter",
+      "control.orient_to_sound_exit",
+      "control.run_auto_wakeup_enter",
+      "control.run_follow_enter",
+      "control.run_follow_exit",
+      "control.run_mic_enter",
+      "control.run_mic_exit",
+      "control.run_motor_test_enter",
+      "control.run_motor_test_exit",
+      "control.run_sound_once_enter",
+      "control.run_sound_once_exit",
+      "control.run_stdin_wakeup_enter",
+      "control.run_stdin_wakeup_exit",
+      "control.start_monitor_if_enabled_enter",
+      "control.start_monitor_if_enabled_exit",
+      "control.trigger_qt_voice_dialog_enter",
+      "control.trigger_qt_voice_dialog_exit",
+      "control.trigger_stream_exhausted",
+      "http.urlopen_stub",
+      "mic.doa_angle",
+      "mic.doa_trigger",
+      "mic.logical_close",
+      "mic.logical_open",
+      "mic.no_recent_angle",
+      "monitor.logical_start",
+      "monitor.stop",
+      "serial.logical_close",
+      "serial.logical_open",
+      "voice.prewarm",
+      "voice.prewarm_skipped",
+      "voice.shutdown",
+      "voice.start",
+      "voice.start_skipped",
+      "voice.stop",
+      "voice.stop_skipped",
+      "voice.wait_until_ready"
+    ],
+    "degraded_branches_observed": [
+      "api_latency_warning",
+      "dead_zone",
+      "degraded_readiness_camera",
+      "degraded_readiness_voice",
+      "detector_dropout",
+      "dry_run_guard",
+      "missing_sensor",
+      "optional_motion"
+    ],
+    "interrupt_on_sound_enabled_total": 0,
+    "prewarm_before_first_trigger_all_auto": true,
+    "readiness_gates_before_first_trigger_all_auto": true,
+    "voice_gating_ordered_all_auto": true,
+    "camera_readiness_gate_false_still_enters_follow_loop": true,
+    "failed_scenarios": []
+  },
+  "cross_checks": [
+    {
+      "name": "six_cli_modes_completed",
+      "observed": 6,
+      "expected": 6,
+      "pass": true
+    },
+    {
+      "name": "all_scenarios_completed",
+      "observed": 14,
+      "expected": 14,
+      "pass": true
+    },
+    {
+      "name": "no_physical_device_open",
+      "observed": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "all_frames_pass_contract",
+      "observed": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "sound_interrupt_never_enabled_matches_E7",
+      "observed": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "prewarm_precedes_first_trigger",
+      "observed": true,
+      "expected": true,
+      "pass": true
+    },
+    {
+      "name": "readiness_gates_precede_first_trigger",
+      "observed": true,
+      "expected": true,
+      "pass": true
+    },
+    {
+      "name": "voice_gating_ordered",
+      "observed": true,
+      "expected": true,
+      "pass": true
+    },
+    {
+      "name": "degraded_branches_observed",
+      "observed": 8,
+      "expected": 8,
+      "pass": true
+    },
+    {
+      "name": "dry_run_writes_zero_frames",
+      "observed": 0,
+      "expected": 0,
+      "pass": true
+    }
+  ],
+  "traces": [
+    {
+      "scenario_id": "S01_mic",
+      "mode": "mic",
+      "cli_suffix": [
+        "--duration",
+        "0.20"
+      ],
+      "branch": "nominal",
+      "note": "real run_mic loop with a finite DOA stream",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 0.25,
+      "virtual_sleep_calls": 0,
+      "frames": [],
+      "frames_count": 0,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_mic_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 42
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.1,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 137
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.15,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 275
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.2,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 8
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.25,
+          "component": "control",
+          "action": "run_mic_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.25,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 8,
+          "t": 10000.25,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 9,
+          "t": 10000.25,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 10,
+          "t": 10000.25,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.25,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 0,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S02_motor_test",
+      "mode": "motor-test",
+      "cli_suffix": [
+        "--enable-motors",
+        "--test-part",
+        "body",
+        "--test-direction",
+        "right",
+        "--test-pulse",
+        "18"
+      ],
+      "branch": "nominal",
+      "note": "manual motor-test path and real host clamp",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 1.974,
+      "virtual_sleep_calls": 40,
+      "frames": [
+        {
+          "t": 10000.0,
+          "hex": "AA 55 02 12 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            2,
+            18,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 2,
+          "cmd_name": "body_turn_right",
+          "pulse_le": 18,
+          "direction_bit": false,
+          "pulse_magnitude": 18
+        }
+      ],
+      "frames_count": 1,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "motor:/dev/ttyUSB0"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_motor_test_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 2,
+          "t": 10001.974,
+          "component": "control",
+          "action": "run_motor_test_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 3,
+          "t": 10001.974,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 4,
+          "t": 10001.974,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 5,
+          "t": 10001.974,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 6,
+          "t": 10001.974,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10001.974,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 0,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S03_sound_once",
+      "mode": "sound-once",
+      "cli_suffix": [
+        "--enable-motors"
+      ],
+      "branch": "nominal",
+      "note": "single DOA trigger -> orient_to_sound",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 4.325,
+      "virtual_sleep_calls": 47,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        }
+      ],
+      "frames_count": 3,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_sound_once_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 90,
+            "index": 1
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 90
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=90, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 6,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 7,
+          "t": 10004.325,
+          "component": "control",
+          "action": "run_sound_once_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 8,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 9,
+          "t": 10004.325,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 10,
+          "t": 10004.325,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 11,
+          "t": 10004.325,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 12,
+          "t": 10004.325,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 0,
+        "counter_head_frames": 1,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S04_follow",
+      "mode": "follow",
+      "cli_suffix": [
+        "--enable-motors",
+        "--duration",
+        "0.20"
+      ],
+      "branch": "nominal",
+      "note": "real follow_loop with a synthetic face stream",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 0.12,
+      "virtual_sleep_calls": 12,
+      "frames": [
+        {
+          "t": 10000.01,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 1,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_follow_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "0.2"
+            ]
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.12,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.12,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.12,
+          "component": "control",
+          "action": "run_follow_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.12,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 11,
+          "t": 10000.12,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 12,
+          "t": 10000.12,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 13,
+          "t": 10000.12,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.12,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S05_stdin_wakeup",
+      "mode": "stdin-wakeup",
+      "cli_suffix": [
+        "--enable-motors",
+        "--duration",
+        "0.10"
+      ],
+      "branch": "nominal",
+      "note": "operator-triggered wakeup path",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 4.188,
+      "virtual_sleep_calls": 46,
+      "frames": [
+        {
+          "t": 10000.0,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10002.0,
+          "hex": "AA 55 02 10 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            2,
+            16,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 2,
+          "cmd_name": "body_turn_right",
+          "pulse_le": 16,
+          "direction_bit": false,
+          "pulse_magnitude": 16
+        },
+        {
+          "t": 10002.0,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10004.188,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 4,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_stdin_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 307
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=307, timestamp=10000.0)"
+            ]
+          }
+        },
+        {
+          "step": 9,
+          "t": 10003.888,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 10,
+          "t": 10003.888,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 3,
+            "args": [
+              "0.1"
+            ]
+          }
+        },
+        {
+          "step": 11,
+          "t": 10004.188,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 4
+          }
+        },
+        {
+          "step": 12,
+          "t": 10004.188,
+          "component": "control",
+          "action": "run_stdin_wakeup_exit",
+          "detail": {
+            "frames_after": 4
+          }
+        },
+        {
+          "step": 13,
+          "t": 10004.188,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 14,
+          "t": 10004.188,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 15,
+          "t": 10004.188,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 16,
+          "t": 10004.188,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.188,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 1,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S06_auto_wakeup",
+      "mode": "auto-wakeup",
+      "cli_suffix": [
+        "--enable-motors"
+      ],
+      "branch": "nominal",
+      "note": "three full product cycles of the real state machine",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 15.938,
+      "virtual_sleep_calls": 271,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10004.625,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10004.925,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10005.475,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 02 10 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            2,
+            16,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 2,
+          "cmd_name": "body_turn_right",
+          "pulse_le": 16,
+          "direction_bit": false,
+          "pulse_magnitude": 16
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.663,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.963,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10010.513,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10012.513,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10012.513,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10015.088,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10015.388,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 15,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm",
+          "detail": {
+            "gate": "idle, awaiting SIGUSR1"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": true,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": true
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 90,
+            "index": 1
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 90
+          }
+        },
+        {
+          "step": 16,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=90, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 18,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 19,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 20,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 21,
+          "t": 10004.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 22,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 23,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 24,
+          "t": 10004.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 3,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 25,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 26,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 27,
+          "t": 10004.925,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 28,
+          "t": 10004.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 5
+          }
+        },
+        {
+          "step": 29,
+          "t": 10005.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 30,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 307,
+            "index": 2
+          }
+        },
+        {
+          "step": 31,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 307
+          }
+        },
+        {
+          "step": 32,
+          "t": 10005.475,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 5,
+            "args": [
+              "MicAngleEvent(angle=307, timestamp=10005.475000000008)"
+            ]
+          }
+        },
+        {
+          "step": 33,
+          "t": 10009.363,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 34,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 35,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 36,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 37,
+          "t": 10009.363,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 38,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 39,
+          "t": 10009.363,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 40,
+          "t": 10009.363,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 8,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 41,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 42,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 43,
+          "t": 10009.963,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 44,
+          "t": 10009.963,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 10
+          }
+        },
+        {
+          "step": 45,
+          "t": 10010.463,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 46,
+          "t": 10010.513,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 104,
+            "index": 3
+          }
+        },
+        {
+          "step": 47,
+          "t": 10010.513,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 104
+          }
+        },
+        {
+          "step": 48,
+          "t": 10010.513,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 10,
+            "args": [
+              "MicAngleEvent(angle=104, timestamp=10010.513000000017)"
+            ]
+          }
+        },
+        {
+          "step": 49,
+          "t": 10014.788,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 13
+          }
+        },
+        {
+          "step": 50,
+          "t": 10014.788,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 13
+          }
+        },
+        {
+          "step": 51,
+          "t": 10014.788,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 13
+          }
+        },
+        {
+          "step": 52,
+          "t": 10014.788,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 13
+          }
+        },
+        {
+          "step": 53,
+          "t": 10014.788,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 54,
+          "t": 10014.788,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 13
+          }
+        },
+        {
+          "step": 55,
+          "t": 10014.788,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 56,
+          "t": 10014.788,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 13,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 57,
+          "t": 10015.388,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 58,
+          "t": 10015.388,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 15
+          }
+        },
+        {
+          "step": 59,
+          "t": 10015.388,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 60,
+          "t": 10015.388,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 15
+          }
+        },
+        {
+          "step": 61,
+          "t": 10015.888,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 15
+          }
+        },
+        {
+          "step": 62,
+          "t": 10015.938,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 3
+          }
+        },
+        {
+          "step": 63,
+          "t": 10015.938,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 64,
+          "t": 10015.938,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 65,
+          "t": 10015.938,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 66,
+          "t": 10015.938,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 67,
+          "t": 10015.938,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        },
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        },
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "all subsystems ready"
+      ],
+      "derived": {
+        "follow_windows": 3,
+        "counter_head_frames": 3,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 3,
+        "mic_flushes": 3,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S07_voice_not_ready",
+      "mode": "auto-wakeup",
+      "cli_suffix": [
+        "--enable-motors"
+      ],
+      "branch": "degraded_readiness_voice",
+      "note": "voice readiness gate returns False; source proceeds degraded",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 10.513,
+      "virtual_sleep_calls": 178,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10004.625,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10004.925,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10005.475,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 02 10 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            2,
+            16,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 2,
+          "cmd_name": "body_turn_right",
+          "pulse_le": 16,
+          "direction_bit": false,
+          "pulse_magnitude": 16
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.663,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.963,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 10,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm",
+          "detail": {
+            "gate": "idle, awaiting SIGUSR1"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": false,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": true
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 90,
+            "index": 1
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 90
+          }
+        },
+        {
+          "step": 16,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=90, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 18,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 19,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 20,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 21,
+          "t": 10004.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 22,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 23,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 24,
+          "t": 10004.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 3,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 25,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 26,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 27,
+          "t": 10004.925,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 28,
+          "t": 10004.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 5
+          }
+        },
+        {
+          "step": 29,
+          "t": 10005.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 30,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 307,
+            "index": 2
+          }
+        },
+        {
+          "step": 31,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 307
+          }
+        },
+        {
+          "step": 32,
+          "t": 10005.475,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 5,
+            "args": [
+              "MicAngleEvent(angle=307, timestamp=10005.475000000008)"
+            ]
+          }
+        },
+        {
+          "step": 33,
+          "t": 10009.363,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 34,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 35,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 36,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 37,
+          "t": 10009.363,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 38,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 39,
+          "t": 10009.363,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 40,
+          "t": 10009.363,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 8,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 41,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 42,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 43,
+          "t": 10009.963,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 44,
+          "t": 10009.963,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 10
+          }
+        },
+        {
+          "step": 45,
+          "t": 10010.463,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 46,
+          "t": 10010.513,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 2
+          }
+        },
+        {
+          "step": 47,
+          "t": 10010.513,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 48,
+          "t": 10010.513,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 49,
+          "t": 10010.513,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 50,
+          "t": 10010.513,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 51,
+          "t": 10010.513,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        },
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "degraded readiness"
+      ],
+      "derived": {
+        "follow_windows": 2,
+        "counter_head_frames": 2,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 2,
+        "mic_flushes": 2,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S08_camera_not_ready",
+      "mode": "auto-wakeup",
+      "cli_suffix": [
+        "--enable-motors"
+      ],
+      "branch": "degraded_readiness_camera",
+      "note": "camera readiness gate returns False; source proceeds degraded",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 10.513,
+      "virtual_sleep_calls": 178,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10004.625,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10004.925,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10005.475,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 02 10 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            2,
+            16,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 2,
+          "cmd_name": "body_turn_right",
+          "pulse_le": 16,
+          "direction_bit": false,
+          "pulse_magnitude": 16
+        },
+        {
+          "t": 10007.475,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.663,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10009.963,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 10,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm",
+          "detail": {
+            "gate": "idle, awaiting SIGUSR1"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "loading_detector"
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": true,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": false
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 90,
+            "index": 1
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 90
+          }
+        },
+        {
+          "step": 16,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=90, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 18,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 19,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 20,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 21,
+          "t": 10004.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 22,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 23,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 24,
+          "t": 10004.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 3,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 25,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 26,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 27,
+          "t": 10004.925,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 28,
+          "t": 10004.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 5
+          }
+        },
+        {
+          "step": 29,
+          "t": 10005.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 30,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 307,
+            "index": 2
+          }
+        },
+        {
+          "step": 31,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 307
+          }
+        },
+        {
+          "step": 32,
+          "t": 10005.475,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 5,
+            "args": [
+              "MicAngleEvent(angle=307, timestamp=10005.475000000008)"
+            ]
+          }
+        },
+        {
+          "step": 33,
+          "t": 10009.363,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 34,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 35,
+          "t": 10009.363,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 36,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 8
+          }
+        },
+        {
+          "step": 37,
+          "t": 10009.363,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 38,
+          "t": 10009.363,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 8
+          }
+        },
+        {
+          "step": 39,
+          "t": 10009.363,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 40,
+          "t": 10009.363,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 8,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 41,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 42,
+          "t": 10009.963,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 43,
+          "t": 10009.963,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 44,
+          "t": 10009.963,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 10
+          }
+        },
+        {
+          "step": 45,
+          "t": 10010.463,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 10
+          }
+        },
+        {
+          "step": 46,
+          "t": 10010.513,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 2
+          }
+        },
+        {
+          "step": 47,
+          "t": 10010.513,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 48,
+          "t": 10010.513,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 49,
+          "t": 10010.513,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 50,
+          "t": 10010.513,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 51,
+          "t": 10010.513,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        },
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "degraded readiness"
+      ],
+      "derived": {
+        "follow_windows": 2,
+        "counter_head_frames": 2,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 2,
+        "mic_flushes": 2,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S09_api_vision",
+      "mode": "auto-wakeup",
+      "cli_suffix": [
+        "--enable-motors",
+        "--use-api-vision",
+        "--no-voice-assistant"
+      ],
+      "branch": "api_latency_warning",
+      "note": "source prints the API-vision latency warning; voice disabled",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 5.475,
+      "virtual_sleep_calls": 93,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 09 09 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 9,
+          "direction_bit": false,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.05,
+          "hex": "AA 55 09 09 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            9,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32777,
+          "direction_bit": true,
+          "pulse_magnitude": 9
+        },
+        {
+          "t": 10004.625,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10004.925,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 5,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm_skipped",
+          "detail": {
+            "enabled": false,
+            "use_api": false
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": true,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": true
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 104,
+            "index": 1
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 104
+          }
+        },
+        {
+          "step": 16,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=104, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 18,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 19,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 20,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 21,
+          "t": 10004.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 22,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 23,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "start_skipped",
+          "detail": {
+            "enabled": false
+          }
+        },
+        {
+          "step": 24,
+          "t": 10004.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 3,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 25,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 26,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 27,
+          "t": 10004.925,
+          "component": "voice",
+          "action": "stop_skipped",
+          "detail": {
+            "enabled": false
+          }
+        },
+        {
+          "step": 28,
+          "t": 10004.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 5
+          }
+        },
+        {
+          "step": 29,
+          "t": 10005.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 5
+          }
+        },
+        {
+          "step": 30,
+          "t": 10005.475,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 1
+          }
+        },
+        {
+          "step": 31,
+          "t": 10005.475,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 32,
+          "t": 10005.475,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 33,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 34,
+          "t": 10005.475,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 35,
+          "t": 10005.475,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "WARNING: vision is going through HTTP API",
+        "all subsystems ready"
+      ],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 1,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 1,
+        "mic_flushes": 1,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S10_dry_run",
+      "mode": "auto-wakeup",
+      "cli_suffix": [],
+      "branch": "dry_run_guard",
+      "note": "default enable_motors=False -> zero serial writes",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 5.475,
+      "virtual_sleep_calls": 93,
+      "frames": [],
+      "frames_count": 0,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm",
+          "detail": {
+            "gate": "idle, awaiting SIGUSR1"
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": true,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": true
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 90,
+            "index": 1
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 90
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=90, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 16,
+          "t": 10004.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 17,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 18,
+          "t": 10004.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 19,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 20,
+          "t": 10004.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 21,
+          "t": 10004.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 22,
+          "t": 10004.325,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 23,
+          "t": 10004.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 24,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 25,
+          "t": 10004.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 26,
+          "t": 10004.925,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 27,
+          "t": 10004.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 28,
+          "t": 10005.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 29,
+          "t": 10005.475,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 1
+          }
+        },
+        {
+          "step": 30,
+          "t": 10005.475,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 31,
+          "t": 10005.475,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 32,
+          "t": 10005.475,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 33,
+          "t": 10005.475,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 34,
+          "t": 10005.475,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "all subsystems ready",
+        "dry-run"
+      ],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 1,
+        "mic_flushes": 1,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S11_dead_zone",
+      "mode": "sound-once",
+      "cli_suffix": [
+        "--enable-motors"
+      ],
+      "branch": "dead_zone",
+      "note": "7 deg is inside the 15 deg dead zone",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 0.05,
+      "virtual_sleep_calls": 0,
+      "frames": [],
+      "frames_count": 0,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_sound_once_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 7,
+            "index": 1
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 7
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=7, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.05,
+          "component": "control",
+          "action": "run_sound_once_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.05,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 9,
+          "t": 10000.05,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 10,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 11,
+          "t": 10000.05,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.05,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [
+        "within dead zone"
+      ],
+      "derived": {
+        "follow_windows": 0,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S12_face_dropout",
+      "mode": "follow",
+      "cli_suffix": [
+        "--enable-motors",
+        "--duration",
+        "0.20"
+      ],
+      "branch": "detector_dropout",
+      "note": "synthetic detector dropout stream",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 0.12,
+      "virtual_sleep_calls": 12,
+      "frames": [
+        {
+          "t": 10000.01,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 1,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_follow_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "0.2"
+            ]
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.12,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.12,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.12,
+          "component": "control",
+          "action": "run_follow_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.12,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 11,
+          "t": 10000.12,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 12,
+          "t": 10000.12,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 13,
+          "t": 10000.12,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.12,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 8
+      }
+    },
+    {
+      "scenario_id": "S13_no_angle",
+      "mode": "stdin-wakeup",
+      "cli_suffix": [
+        "--enable-motors",
+        "--duration",
+        "0.10"
+      ],
+      "branch": "missing_sensor",
+      "note": "no recent DOA angle -> source skips sound orientation",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 1.3,
+      "virtual_sleep_calls": 10,
+      "frames": [
+        {
+          "t": 10001.21,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 1,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_stdin_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "no_recent_angle",
+          "detail": {
+            "max_age": 1.2
+          }
+        },
+        {
+          "step": 8,
+          "t": 10001.2,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "0.1"
+            ]
+          }
+        },
+        {
+          "step": 9,
+          "t": 10001.3,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 10,
+          "t": 10001.3,
+          "component": "control",
+          "action": "run_stdin_wakeup_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 11,
+          "t": 10001.3,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 12,
+          "t": 10001.3,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 13,
+          "t": 10001.3,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 14,
+          "t": 10001.3,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 15,
+          "t": 10001.3,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [],
+      "stdout_markers": [
+        "no sound angle available"
+      ],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": false,
+        "readiness_gates_before_first_trigger": false,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 0,
+        "mic_flushes": 0,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    },
+    {
+      "scenario_id": "S14_skip_sound_head",
+      "mode": "auto-wakeup",
+      "cli_suffix": [
+        "--enable-motors",
+        "--skip-sound-head"
+      ],
+      "branch": "optional_motion",
+      "note": "head pre-turn and counter-head callback are skipped",
+      "completed": true,
+      "error": null,
+      "branch_observed": true,
+      "virtual_duration_s": 3.475,
+      "virtual_sleep_calls": 92,
+      "frames": [
+        {
+          "t": 10000.05,
+          "hex": "AA 55 01 19 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            1,
+            25,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 1,
+          "cmd_name": "body_turn_left",
+          "pulse_le": 25,
+          "direction_bit": false,
+          "pulse_magnitude": 25
+        },
+        {
+          "t": 10002.625,
+          "hex": "AA 55 09 05 00 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            0,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 5,
+          "direction_bit": false,
+          "pulse_magnitude": 5
+        },
+        {
+          "t": 10002.925,
+          "hex": "AA 55 09 05 80 0D 0A",
+          "bytes": [
+            170,
+            85,
+            9,
+            5,
+            128,
+            13,
+            10
+          ],
+          "len": 7,
+          "cmd": 9,
+          "cmd_name": "vision_track_head",
+          "pulse_le": 32773,
+          "direction_bit": true,
+          "pulse_magnitude": 5
+        }
+      ],
+      "frames_count": 3,
+      "contract_errors": [],
+      "physical_device_open_attempts": 0,
+      "logical_device_opens": [
+        "mic:scripted",
+        "motor:/dev/ttyUSB0",
+        "camera:scripted"
+      ],
+      "control_events": [
+        {
+          "step": 0,
+          "t": 10000.0,
+          "component": "control",
+          "action": "run_auto_wakeup_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 1,
+          "t": 10000.0,
+          "component": "mic",
+          "action": "logical_open",
+          "detail": {}
+        },
+        {
+          "step": 2,
+          "t": 10000.0,
+          "component": "serial",
+          "action": "logical_open",
+          "detail": {
+            "role": "motor",
+            "port": "/dev/ttyUSB0",
+            "baud": 9600
+          }
+        },
+        {
+          "step": 3,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 4,
+          "t": 10000.0,
+          "component": "monitor",
+          "action": "logical_start",
+          "detail": {
+            "endpoints": [
+              "/",
+              "/status",
+              "/stream.mjpg"
+            ]
+          }
+        },
+        {
+          "step": 5,
+          "t": 10000.0,
+          "component": "control",
+          "action": "start_monitor_if_enabled_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 6,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "prewarm",
+          "detail": {
+            "gate": "idle, awaiting SIGUSR1"
+          }
+        },
+        {
+          "step": 7,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 0
+          }
+        },
+        {
+          "step": 8,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "logical_open",
+          "detail": {
+            "state": "ready"
+          }
+        },
+        {
+          "step": 9,
+          "t": 10000.0,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 10,
+          "t": 10000.0,
+          "component": "voice",
+          "action": "wait_until_ready",
+          "detail": {
+            "ready": true,
+            "timeout": 60.0
+          }
+        },
+        {
+          "step": 11,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_enter",
+          "detail": {
+            "frames_before": 0,
+            "kwargs": {
+              "timeout": "60.0"
+            }
+          }
+        },
+        {
+          "step": 12,
+          "t": 10000.0,
+          "component": "camera",
+          "action": "readiness_gate",
+          "detail": {
+            "ready": true
+          }
+        },
+        {
+          "step": 13,
+          "t": 10000.0,
+          "component": "control",
+          "action": "_wait_camera_ready_exit",
+          "detail": {
+            "frames_after": 0
+          }
+        },
+        {
+          "step": 14,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_trigger",
+          "detail": {
+            "angle": 110,
+            "index": 1
+          }
+        },
+        {
+          "step": 15,
+          "t": 10000.05,
+          "component": "mic",
+          "action": "doa_angle",
+          "detail": {
+            "angle": 110
+          }
+        },
+        {
+          "step": 16,
+          "t": 10000.05,
+          "component": "control",
+          "action": "orient_to_sound_enter",
+          "detail": {
+            "frames_before": 0,
+            "args": [
+              "MicAngleEvent(angle=110, timestamp=10000.05)"
+            ]
+          }
+        },
+        {
+          "step": 17,
+          "t": 10002.325,
+          "component": "control",
+          "action": "orient_to_sound_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 18,
+          "t": 10002.325,
+          "component": "control",
+          "action": "open_camera_async_enter",
+          "detail": {
+            "frames_before": 1
+          }
+        },
+        {
+          "step": 19,
+          "t": 10002.325,
+          "component": "control",
+          "action": "open_camera_async_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 20,
+          "t": 10002.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_enter",
+          "detail": {
+            "frames_before": 1
+          }
+        },
+        {
+          "step": 21,
+          "t": 10002.325,
+          "component": "http",
+          "action": "urlopen_stub",
+          "detail": {
+            "url": "http://127.0.0.1:8765/trigger-voice-assistant"
+          }
+        },
+        {
+          "step": 22,
+          "t": 10002.325,
+          "component": "control",
+          "action": "trigger_qt_voice_dialog_exit",
+          "detail": {
+            "frames_after": 1
+          }
+        },
+        {
+          "step": 23,
+          "t": 10002.325,
+          "component": "voice",
+          "action": "start",
+          "detail": {
+            "signal": "SIGUSR1"
+          }
+        },
+        {
+          "step": 24,
+          "t": 10002.325,
+          "component": "control",
+          "action": "follow_loop_enter",
+          "detail": {
+            "frames_before": 1,
+            "args": [
+              "120"
+            ],
+            "kwargs": {
+              "interrupt_on_sound": "False"
+            }
+          }
+        },
+        {
+          "step": 25,
+          "t": 10002.925,
+          "component": "control",
+          "action": "follow_window_exhausted",
+          "detail": {
+            "face_samples": 24
+          }
+        },
+        {
+          "step": 26,
+          "t": 10002.925,
+          "component": "control",
+          "action": "follow_loop_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 27,
+          "t": 10002.925,
+          "component": "voice",
+          "action": "stop",
+          "detail": {
+            "signal": "SIGUSR2"
+          }
+        },
+        {
+          "step": 28,
+          "t": 10002.925,
+          "component": "control",
+          "action": "flush_mic_array_enter",
+          "detail": {
+            "frames_before": 3
+          }
+        },
+        {
+          "step": 29,
+          "t": 10003.425,
+          "component": "control",
+          "action": "flush_mic_array_exit",
+          "detail": {
+            "frames_after": 3
+          }
+        },
+        {
+          "step": 30,
+          "t": 10003.475,
+          "component": "control",
+          "action": "trigger_stream_exhausted",
+          "detail": {
+            "consumed": 1
+          }
+        },
+        {
+          "step": 31,
+          "t": 10003.475,
+          "component": "voice",
+          "action": "shutdown",
+          "detail": {}
+        },
+        {
+          "step": 32,
+          "t": 10003.475,
+          "component": "monitor",
+          "action": "stop",
+          "detail": {}
+        },
+        {
+          "step": 33,
+          "t": 10003.475,
+          "component": "mic",
+          "action": "logical_close",
+          "detail": {}
+        },
+        {
+          "step": 34,
+          "t": 10003.475,
+          "component": "serial",
+          "action": "logical_close",
+          "detail": {
+            "role": "motor"
+          }
+        },
+        {
+          "step": 35,
+          "t": 10003.475,
+          "component": "camera",
+          "action": "logical_close",
+          "detail": {}
+        }
+      ],
+      "http_calls": [
+        {
+          "url": "http://127.0.0.1:8765/trigger-voice-assistant",
+          "timeout": 0.5
+        }
+      ],
+      "stdout_markers": [
+        "all subsystems ready",
+        "skipping head pre-turn"
+      ],
+      "derived": {
+        "follow_windows": 1,
+        "counter_head_frames": 0,
+        "prewarm_before_first_trigger": true,
+        "readiness_gates_before_first_trigger": true,
+        "voice_gating_ordered": true,
+        "qt_ui_triggers": 1,
+        "mic_flushes": 1,
+        "interrupt_on_sound_enabled": 0,
+        "face_none_samples": 0
+      }
+    }
+  ],
+  "fingerprint_sha256": "da15ce59439cb8e6160573f39f0dac3cc2fa9d2e86c2ca7b3422c591b682e976"
+}

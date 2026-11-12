@@ -1,0 +1,378 @@
+{
+  "schema": "gedgebot.sensitivity.v1",
+  "generated_at_utc": "2026-11-07T11:37:59.968033+00:00",
+  "timestamp_unix": 1794051479.968181,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/sensitivity_bench.py",
+  "script_sha256": "7570e51e4d391a448f72d3b8939b5ea1f7ce48db017f2317cf001a831c56b748",
+  "mode": "device",
+  "evidence_status": "device_measurement_partial",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "NEW 2026-11-07 device measurement varying inference parameters to explain discrepancies between the October transcription and the November rebuilt/source-aligned runs. It does NOT recover or reproduce the October experiment; the original audio, prompts and scripts remain unavailable. citation_allowed=false until manual review.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MAXN\n0",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "profile": "parameter_sensitivity",
+  "source_root": "/root/src/gedge_bot",
+  "source_commit": "c25b444b830214f062b08a96dc3b4d7ffa731a0f",
+  "condition": {
+    "power_mode_requested": "MAXN",
+    "power_mode_observed": "NV Power Mode: MAXN\n0",
+    "repeats_per_case": 3,
+    "whisper_model": "/root/gedge_bot_validation_20261107/models/whisper-small",
+    "nllb_model": "/root/src/sample/models/nllb-200",
+    "audio": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+    "hf_hub_offline": "1",
+    "audio_duration_s": 10.0
+  },
+  "targets": {
+    "whisper_10s_rtf_october_15w": 0.091,
+    "nllb_short_s_single_model_15w": 0.42,
+    "nllb_short_s_power_table_15w": 1.33,
+    "note": "Historical values are transcribed, not measurements; they are comparison targets only and are never pooled with new data."
+  },
+  "whisper": {
+    "fp16_warm": {
+      "dtype": "fp16",
+      "warmup": true,
+      "language_hint": "chinese",
+      "model_path": "/root/gedge_bot_validation_20261107/models/whisper-small",
+      "sampling_rate": 16000,
+      "warmup_call_s": 17.100607279979158,
+      "cold_first_call_s": null,
+      "clips": {
+        "1s": {
+          "audio_duration_s": 1.0,
+          "n": 3,
+          "processing_mean_s": 0.29438610867752385,
+          "processing_pstdev_s": 0.02387801137834698,
+          "processing_s": [
+            0.31856134202098474,
+            0.26188017398817465,
+            0.3027168100234121
+          ],
+          "rtf": 0.29438610867752385,
+          "rtf_cold_first_call": null
+        },
+        "2s": {
+          "audio_duration_s": 2.0,
+          "n": 3,
+          "processing_mean_s": 0.44153990198780474,
+          "processing_pstdev_s": 0.03802670051098481,
+          "processing_s": [
+            0.47276130598038435,
+            0.38800871901912615,
+            0.46384968096390367
+          ],
+          "rtf": 0.22076995099390237,
+          "rtf_cold_first_call": null
+        },
+        "5s": {
+          "audio_duration_s": 5.0,
+          "n": 3,
+          "processing_mean_s": 0.6297449449969766,
+          "processing_pstdev_s": 0.03300841733414824,
+          "processing_s": [
+            0.6679344889707863,
+            0.587401463999413,
+            0.6338988820207305
+          ],
+          "rtf": 0.12594898899939533,
+          "rtf_cold_first_call": null
+        },
+        "10s": {
+          "audio_duration_s": 10.0,
+          "n": 3,
+          "processing_mean_s": 1.0041414740262553,
+          "processing_pstdev_s": 0.01978069839482334,
+          "processing_s": [
+            1.0171270540449768,
+            0.9761907000211067,
+            1.0191066680126823
+          ],
+          "rtf": 0.10041414740262553,
+          "rtf_cold_first_call": null
+        }
+      }
+    },
+    "fp32_no_warm": {
+      "dtype": "fp32",
+      "warmup": false,
+      "language_hint": "chinese",
+      "model_path": "/root/gedge_bot_validation_20261107/models/whisper-small",
+      "sampling_rate": 16000,
+      "warmup_call_s": null,
+      "cold_first_call_s": 1.361303026031237,
+      "clips": {
+        "10s": {
+          "audio_duration_s": 10.0,
+          "n": 3,
+          "processing_mean_s": 1.2436637926730327,
+          "processing_pstdev_s": 0.03229724627428144,
+          "processing_s": [
+            1.2044258459936827,
+            1.2430353999952786,
+            1.2835301320301369
+          ],
+          "rtf": 0.12436637926730328,
+          "rtf_cold_first_call": 0.1361303026031237
+        }
+      }
+    }
+  },
+  "nllb": {
+    "cases": {
+      "short__beam5_source": {
+        "prompt_key": "short",
+        "prompt_chars": 19,
+        "prompt": "Hello, how are you?",
+        "decoding": "beam5_source",
+        "n": 3,
+        "latency_mean_s": 0.5249764816641497,
+        "latency_pstdev_s": 0.024493720117331103,
+        "latency_cv": 0.04665679506191823,
+        "durations_s": [
+          0.5571712229866534,
+          0.5199487750069238,
+          0.49780944699887186
+        ],
+        "output_tokens": [
+          9,
+          9,
+          9
+        ],
+        "tokens_per_s": [
+          16.15302375409217,
+          17.309397449547127,
+          18.07920692196184
+        ]
+      },
+      "short__greedy_control": {
+        "prompt_key": "short",
+        "prompt_chars": 19,
+        "prompt": "Hello, how are you?",
+        "decoding": "greedy_control",
+        "n": 3,
+        "latency_mean_s": 0.30932436865987256,
+        "latency_pstdev_s": 0.0011657001106943872,
+        "latency_cv": 0.003768536296524927,
+        "durations_s": [
+          0.3101433729752898,
+          0.31015390204265714,
+          0.3076758309616707
+        ],
+        "output_tokens": [
+          9,
+          9,
+          9
+        ],
+        "tokens_per_s": [
+          29.018837041915646,
+          29.01785191392556,
+          29.25156640308608
+        ]
+      },
+      "short_alt__beam5_source": {
+        "prompt_key": "short_alt",
+        "prompt_chars": 64,
+        "prompt": "Hello, how are you? Please translate this sentence into English.",
+        "decoding": "beam5_source",
+        "n": 3,
+        "latency_mean_s": 0.9007779949849161,
+        "latency_pstdev_s": 0.04968752563583932,
+        "latency_cv": 0.05516067878264651,
+        "durations_s": [
+          0.9710181669797748,
+          0.8673939920263365,
+          0.863921825948637
+        ],
+        "output_tokens": [
+          17,
+          17,
+          17
+        ],
+        "tokens_per_s": [
+          17.507396440250215,
+          19.598936764924968,
+          19.677706349568144
+        ]
+      },
+      "short_alt__greedy_control": {
+        "prompt_key": "short_alt",
+        "prompt_chars": 64,
+        "prompt": "Hello, how are you? Please translate this sentence into English.",
+        "decoding": "greedy_control",
+        "n": 3,
+        "latency_mean_s": 0.5208403376745991,
+        "latency_pstdev_s": 0.014698094040635809,
+        "latency_cv": 0.02821996104652441,
+        "durations_s": [
+          0.5378702700254507,
+          0.5226470479974523,
+          0.5020036950008944
+        ],
+        "output_tokens": [
+          17,
+          17,
+          17
+        ],
+        "tokens_per_s": [
+          31.606134317845083,
+          32.52673111832608,
+          33.864292572527205
+        ]
+      },
+      "mid__beam5_source": {
+        "prompt_key": "mid",
+        "prompt_chars": 63,
+        "prompt": "The robot will now turn toward the speaker and begin following.",
+        "decoding": "beam5_source",
+        "n": 3,
+        "latency_mean_s": 0.7497014010053439,
+        "latency_pstdev_s": 0.004200341620073476,
+        "latency_cv": 0.005602686102014549,
+        "durations_s": [
+          0.747823134995997,
+          0.7457601249916479,
+          0.7555209430283867
+        ],
+        "output_tokens": [
+          15,
+          15,
+          15
+        ],
+        "tokens_per_s": [
+          20.058218712477107,
+          20.113706133279774,
+          19.853850695223436
+        ]
+      },
+      "mid__greedy_control": {
+        "prompt_key": "mid",
+        "prompt_chars": 63,
+        "prompt": "The robot will now turn toward the speaker and begin following.",
+        "decoding": "greedy_control",
+        "n": 3,
+        "latency_mean_s": 0.44642093667062,
+        "latency_pstdev_s": 0.0008766073995863245,
+        "latency_cv": 0.0019636341568655107,
+        "durations_s": [
+          0.4455554340383969,
+          0.44608502701157704,
+          0.447622348961886
+        ],
+        "output_tokens": [
+          15,
+          15,
+          15
+        ],
+        "tokens_per_s": [
+          33.66584459321696,
+          33.62587643994317,
+          33.51039114733124
+        ]
+      },
+      "long__beam5_source": {
+        "prompt_key": "long",
+        "prompt_chars": 207,
+        "prompt": "Compute regeneration reorganizes retired edge AI silicon into a new product by keeping non-deterministic workloads on the old accelerator and moving hard real-time control to a deterministic microcontroller.",
+        "decoding": "beam5_source",
+        "n": 3,
+        "latency_mean_s": 2.5231413946603425,
+        "latency_pstdev_s": 0.014384417873204904,
+        "latency_cv": 0.005700995554052685,
+        "durations_s": [
+          2.5434835919877514,
+          2.5128542259917594,
+          2.5130863660015166
+        ],
+        "output_tokens": [
+          51,
+          51,
+          51
+        ],
+        "tokens_per_s": [
+          20.05124002397952,
+          20.295646071499274,
+          20.29377131242183
+        ]
+      },
+      "long__greedy_control": {
+        "prompt_key": "long",
+        "prompt_chars": 207,
+        "prompt": "Compute regeneration reorganizes retired edge AI silicon into a new product by keeping non-deterministic workloads on the old accelerator and moving hard real-time control to a deterministic microcontroller.",
+        "decoding": "greedy_control",
+        "n": 3,
+        "latency_mean_s": 1.5259383509983309,
+        "latency_pstdev_s": 0.004540766376705795,
+        "latency_cv": 0.002975720725372058,
+        "durations_s": [
+          1.5313177009811625,
+          1.5202114430139773,
+          1.5262859089998528
+        ],
+        "output_tokens": [
+          51,
+          51,
+          51
+        ],
+        "tokens_per_s": [
+          33.304649954299315,
+          33.54796481395193,
+          33.41444725347649
+        ]
+      }
+    },
+    "setup": {
+      "tokenizer": "NllbTokenizer",
+      "dtype": "float16",
+      "src_lang": "zho_Hans",
+      "forced_bos_token": "eng_Latn",
+      "forced_bos_token_id": 256047,
+      "model_path": "/root/src/sample/models/nllb-200",
+      "note": "English prompts, as in the historical table; only latency is measured, so the language-tag mismatch does not affect timing."
+    },
+    "warmup_call_s": 0.7064049349864945
+  },
+  "errors": [],
+  "measurement_summary": {
+    "whisper_profiles": [
+      "fp16_warm",
+      "fp32_no_warm"
+    ],
+    "whisper_clip_cases": 5,
+    "nllb_cases": 8
+  }
+}

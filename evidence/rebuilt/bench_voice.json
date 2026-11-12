@@ -1,0 +1,90 @@
+{
+  "schema": "gedgebot.bench_voice.rebuilt.v1",
+  "generated_at_utc": "2026-11-07T08:55:16.545093+00:00",
+  "timestamp_unix": 1794041716.545489,
+  "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_voice.py",
+  "script_sha256": "fa9da857bdec3ee9e29ea32845b4f12862a5e24f18fdc6dbc7171bc1f465b7ef",
+  "mode": "probe",
+  "evidence_status": "local_probe_no_measurement",
+  "device_measurement": false,
+  "citation_allowed": false,
+  "evidence_note": "Reconstructed script, not a recovered October 2026 artifact. Local probe runs do not measure the robot or any AI model and must not be cited as experimental results.",
+  "environment": {
+    "platform": "macOS-15.8.1-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64",
+    "python": "3.13.12 (main, Feb  4 2026, 00:40:20) [Clang 21.1.4 ]",
+    "hostname": "MacBook-Pro.local",
+    "l4t_release": null,
+    "is_jetson": false,
+    "power_mode": "not Jetson",
+    "hf_hub_offline": null,
+    "torch_importable": false,
+    "ultralytics_importable": false,
+    "transformers_importable": false
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "condition": {
+    "model_paths": {
+      "whisper": "/root/src/gedge_bot/VoiceAsistant/.hf_cache/hub/models--openai--whisper-small",
+      "nllb": "/root/src/sample/models/nllb-200"
+    },
+    "audio": null,
+    "text_chars": 0
+  },
+  "stages": {
+    "asr": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "mt": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "tts": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    }
+  },
+  "end_to_end": {
+    "status": "not_measured",
+    "wall_clock_s": null,
+    "stages_complete": [],
+    "conversation_verified": null
+  },
+  "voice_assistant_ready": null,
+  "offline_status": {
+    "hf_hub_offline": null
+  },
+  "historical_bench_voice": {
+    "asr": "Whisper-small",
+    "mt": "NLLB-200 greedy fp16",
+    "tts": "ChatTTS",
+    "note": "Voice assistant failed to warm up within 60 s during the N=6 October demonstrations (voice=False degraded mode). No conversational latency was measured in those runs."
+  },
+  "errors": [],
+  "measurement_attempted": false
+}

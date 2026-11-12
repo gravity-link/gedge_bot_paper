@@ -1,0 +1,35 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  box/.style={draw, rounded corners=1pt, align=center, minimum height=10mm, inner sep=4pt},
+  domain/.style={draw, dashed, inner sep=5pt},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  signal/.style={-{Latex[length=2mm]}, dashed},
+  node distance=5mm and 7mm
+]
+\node[box, fill=blue!7, minimum width=29mm] (mic) {USB microphone array\\DOA frames (0x82)};
+\node[box, fill=blue!7, minimum width=29mm, right=of mic] (astra) {Orbbec Astra\\OpenNI color stream};
+\node[box, fill=blue!7, minimum width=29mm, right=of astra] (fpd) {AR0143 over\\DS90UB953/954};
+\node[box, fill=green!8, minimum width=47mm, below=12mm of astra] (xavier)
+  {\textbf{Retired Jetson AGX Xavier}\\Python orchestration; YOLO; ASR; NLLB\\prewarm, wake-up, arbitration};
+\node[box, fill=orange!10, minimum width=43mm, right=18mm of xavier] (mcu)
+  {\textbf{STM32F407, bare metal}\\frame parsing; finite pulse generation\\automatic stop after each command};
+\node[box, fill=orange!10, minimum width=35mm, below=11mm of mcu] (motors)
+  {Pan motor and\\three-wheel chassis};
+\node[box, fill=purple!8, minimum width=40mm, left=15mm of mcu] (ui)
+  {Voice/UI sidecars\\local or configured remote\\LLM/TTS connectors};
+
+\draw[flow] (mic) -- node[above, sloped, font=\footnotesize]{USB CDC} (xavier.north -| mic);
+\draw[flow] (astra) -- (xavier);
+\draw[signal] (fpd) -- node[above, sloped, font=\footnotesize]{V4L2 integration path} (xavier.north -| fpd);
+\draw[flow] (xavier) -- node[above, align=center, font=\footnotesize]{7-byte semantic frames\\UART 9600; no CRC in captured version} (mcu);
+\draw[flow] (mcu) -- (motors);
+\draw[signal] (xavier) -- (ui);
+\node[draw, dotted, fit=(mic)(astra)(fpd), inner sep=4mm, label=above:{Perception interfaces}] {};
+\node[draw, dotted, fit=(xavier)(ui), inner sep=4mm, label=below:{Non-deterministic AI and product orchestration}] {};
+\node[draw, dotted, fit=(mcu)(motors), inner sep=4mm, label=below:{Deterministic execution domain}] {};
+\end{tikzpicture}
+\caption{Source-grounded GEdgeBot architecture. The Astra/OpenNI path is used by the captured person-following runtime; the FPD-Link path is a separately documented V4L2 integration and is not assumed to be the camera used in every demonstration. Online connectors are shown explicitly because the current voice assistant is not invariably offline.}
+\label{fig:architecture}
+\end{figure*}

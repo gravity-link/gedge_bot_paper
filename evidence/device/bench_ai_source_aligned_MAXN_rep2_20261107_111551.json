@@ -1,0 +1,670 @@
+{
+  "schema": "gedgebot.bench_ai.source_aligned.v1",
+  "generated_at_utc": "2026-11-07T11:26:18.542178+00:00",
+  "timestamp_unix": 1794050778.542367,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/bench_source_aligned.py",
+  "script_sha256": "4f2a3c4510f9be0672462204c130c6d5794f6f96dd4b489a98fa2fd272fb7c23",
+  "mode": "device",
+  "evidence_status": "device_measurement_partial",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "NEW device measurement using parameters copied from the device source tree (see source_evidence). It is NOT the recovered October run and does not prove equivalence with the historical estimator. citation_allowed remains false until manual review.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MAXN\n0",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "profile": "source_aligned",
+  "source_root": "/root/src/gedge_bot",
+  "source_commit": "c25b444b830214f062b08a96dc3b4d7ffa731a0f",
+  "source_evidence": {
+    "yolo": {
+      "file": "RobotControl/robot_runtime.py",
+      "lines": "697-703, 813, 1394-1399",
+      "settings": {
+        "device": "cuda:0",
+        "fuse": true,
+        "warmup_frames": 3,
+        "warmup_shape": [
+          480,
+          640,
+          3
+        ],
+        "conf": 0.35,
+        "classes": [
+          0
+        ],
+        "imgsz_default": 320
+      }
+    },
+    "whisper": {
+      "file": "common-ai-services/asr_service/service.py",
+      "lines": "80-98, 123",
+      "settings": {
+        "model": "openai/whisper-small",
+        "dtype": "float16",
+        "warmup": "1 s silence, language=chinese",
+        "generate_kwargs": {
+          "language": "chinese"
+        }
+      },
+      "config": "common-ai-services/common/config.py:27,37"
+    },
+    "nllb": {
+      "file": "common-ai-services/translation_service/service.py",
+      "lines": "108-114, 153-162",
+      "settings": {
+        "dtype": "float16 (via .half())",
+        "num_beams": 5,
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 3,
+        "early_stopping": true,
+        "max_length": 256,
+        "forced_bos_token_id": "eng_Latn",
+        "synced_gpus": false
+      },
+      "config": "common-ai-services/common/config.py:28,107"
+    },
+    "chattts": {
+      "file": "VoiceAsistant/chattts_server.py",
+      "lines": "patch_jetson_torch()",
+      "note": "measured separately by scripts/chattts_bench.py"
+    }
+  },
+  "source_audit_doc": "evidence/SOURCE_ALIGNMENT.md",
+  "condition": {
+    "power_mode_requested": "MAXN",
+    "power_mode_observed": "NV Power Mode: MAXN\n0",
+    "iterations_per_workload": 60,
+    "nllb_runs_per_prompt": 3,
+    "hf_hub_offline": "1",
+    "transformers_offline": "1",
+    "model_paths": {
+      "yolo": "/root/src/sample/yolov8n.pt",
+      "whisper": "/root/gedge_bot_validation_20261107/models/whisper-small",
+      "nllb": "/root/src/sample/models/nllb-200"
+    }
+  },
+  "workloads": {
+    "yolo_320": {
+      "status": "ok",
+      "value": {
+        "imgsz": 320,
+        "precision": "FP32 (ultralytics default)",
+        "device": "cuda:0",
+        "fused": true,
+        "conf": 0.35,
+        "classes": [
+          0
+        ],
+        "frame_shape": [
+          480,
+          640,
+          3
+        ],
+        "n": 60,
+        "latency_mean_ms": 16.57422440087733,
+        "latency_pstdev_ms": 1.0792179337937395,
+        "latency_p50_ms": 16.763708961661905,
+        "latency_p99_ms": 21.23832202050835,
+        "latency_min_ms": 14.963655965402722,
+        "latency_max_ms": 21.23832202050835,
+        "fps_from_mean": 60.33464829564312,
+        "latencies_ms": [
+          21.23832202050835,
+          15.387675957754254,
+          17.505921015981585,
+          16.985927999485284,
+          20.17651201458648,
+          17.195249965880066,
+          16.658712993375957,
+          16.98045601369813,
+          16.748477006331086,
+          16.88301097601652,
+          16.96234301198274,
+          16.87846699496731,
+          16.918245004490018,
+          17.04762695590034,
+          17.055723001249135,
+          17.18769798753783,
+          17.09774200571701,
+          17.00103300390765,
+          16.995785001199692,
+          17.030346032697707,
+          16.987656999845058,
+          16.755229036789387,
+          17.078252974897623,
+          17.25842198356986,
+          16.623222967609763,
+          16.69426599983126,
+          16.851041989866644,
+          16.763708961661905,
+          16.66037703398615,
+          16.791679023299366,
+          16.605110024102032,
+          16.93783001974225,
+          16.84601797023788,
+          16.812671965453774,
+          16.733148018829525,
+          16.941575042437762,
+          16.68306498322636,
+          16.526450985111296,
+          16.741532017476857,
+          16.954791033640504,
+          16.670042008627206,
+          16.862529970239848,
+          16.79436699487269,
+          16.73650898737833,
+          16.857250011526048,
+          15.54739597486332,
+          14.980520005337894,
+          15.096717979758978,
+          15.130896004848182,
+          15.237876970786601,
+          15.253685996867716,
+          15.150833001825958,
+          15.478113025892526,
+          15.177298046182841,
+          15.108271036297083,
+          15.708651044405997,
+          15.30104799894616,
+          14.96864901855588,
+          15.247830015141517,
+          14.963655965402722
+        ],
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "yolo_640": {
+      "status": "ok",
+      "value": {
+        "imgsz": 640,
+        "precision": "FP32 (ultralytics default)",
+        "device": "cuda:0",
+        "fused": true,
+        "conf": 0.35,
+        "classes": [
+          0
+        ],
+        "frame_shape": [
+          480,
+          640,
+          3
+        ],
+        "n": 60,
+        "latency_mean_ms": 22.959984298601437,
+        "latency_pstdev_ms": 0.9779631943138104,
+        "latency_p50_ms": 22.559601988177747,
+        "latency_p99_ms": 27.530718012712896,
+        "latency_min_ms": 22.245762986131012,
+        "latency_max_ms": 27.530718012712896,
+        "fps_from_mean": 43.5540367534534,
+        "latencies_ms": [
+          27.530718012712896,
+          27.09978597704321,
+          25.213775981683284,
+          23.5264630173333,
+          23.373271978925914,
+          23.542528972029686,
+          23.46518001286313,
+          23.41781900031492,
+          23.426777974236757,
+          23.340598971117288,
+          23.388473025988787,
+          23.30709295347333,
+          23.442747013177723,
+          23.446812003385276,
+          23.40559399453923,
+          23.452507972251624,
+          23.48092501051724,
+          23.35643896367401,
+          23.424027021974325,
+          23.483612982090563,
+          23.46847695298493,
+          22.549105051439255,
+          22.364615986589342,
+          22.539313009474427,
+          22.328805993311107,
+          22.343848017044365,
+          22.476012993138283,
+          22.295301023405045,
+          22.44497201172635,
+          22.611283988226205,
+          22.36560801975429,
+          22.50510302837938,
+          22.405739000532776,
+          22.479276987724006,
+          22.568401996977627,
+          22.412138991057873,
+          22.404074028600007,
+          22.417065978515893,
+          22.39460201235488,
+          22.571281995624304,
+          22.35623198794201,
+          22.503854997921735,
+          22.60885201394558,
+          22.774267999920994,
+          22.627477010246366,
+          22.497485973872244,
+          22.403593990020454,
+          22.429162985645235,
+          22.50478300265968,
+          22.27686799596995,
+          22.559601988177747,
+          22.299397038295865,
+          22.592179011553526,
+          22.50289503717795,
+          22.406155010685325,
+          22.307300998363644,
+          22.649173974059522,
+          22.245762986131012,
+          22.58901100140065,
+          22.39482500590384
+        ],
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "whisper_10s": {
+      "status": "ok",
+      "value": {
+        "audio_path": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+        "audio_duration_s": 10.0,
+        "sampling_rate": 16000,
+        "processing_s": 1.6043657039990649,
+        "rtf": 0.1604365703999065,
+        "dtype": "float16",
+        "language_hint": "chinese",
+        "warmed_up": true,
+        "transcript": null,
+        "note": "transcript deliberately not stored; steady-state measurement after the source-style warm-up",
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "whisper_2s_clip": {
+      "status": "ok",
+      "value": {
+        "audio_path": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+        "audio_duration_s": 2.0,
+        "sampling_rate": 16000,
+        "processing_s": 0.5545255930046551,
+        "rtf": 0.27726279650232755,
+        "dtype": "float16",
+        "language_hint": "chinese",
+        "warmed_up": true,
+        "transcript": null,
+        "note": "transcript deliberately not stored; steady-state measurement after the source-style warm-up",
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "nllb_short": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "short",
+        "prompt_chars": 19,
+        "decoding": "beam5_source",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 0.7204626150196418,
+        "latency_pstdev_s": 0.08938939731690983,
+        "latency_cv": 0.12407222172724788,
+        "output_tokens": 9,
+        "tokens_per_s": 12.49197364634199,
+        "durations_s": [
+          0.8468487589852884,
+          0.6549023740226403,
+          0.6596367120509967
+        ],
+        "generate_kwargs": {
+          "num_beams": 5,
+          "max_length": 256,
+          "repetition_penalty": 1.1,
+          "no_repeat_ngram_size": 3,
+          "early_stopping": true,
+          "forced_bos_token_id": 256047
+        },
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "nllb_mid": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "mid",
+        "prompt_chars": 63,
+        "decoding": "beam5_source",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 1.2016516230263126,
+        "latency_pstdev_s": 0.07527617501706801,
+        "latency_cv": 0.06264392572240524,
+        "output_tokens": 15,
+        "tokens_per_s": 12.48281924025791,
+        "durations_s": [
+          1.2997446220251732,
+          1.1884251800365746,
+          1.1167850670171902
+        ],
+        "generate_kwargs": {
+          "num_beams": 5,
+          "max_length": 256,
+          "repetition_penalty": 1.1,
+          "no_repeat_ngram_size": 3,
+          "early_stopping": true,
+          "forced_bos_token_id": 256047
+        },
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "nllb_long": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "long",
+        "prompt_chars": 207,
+        "decoding": "beam5_source",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 3.3889052433272204,
+        "latency_pstdev_s": 0.018530561904141957,
+        "latency_cv": 0.005468008272178389,
+        "output_tokens": 51,
+        "tokens_per_s": 15.049107702382466,
+        "durations_s": [
+          3.415074379008729,
+          3.3770268429652788,
+          3.374614508007653
+        ],
+        "generate_kwargs": {
+          "num_beams": 5,
+          "max_length": 256,
+          "repetition_penalty": 1.1,
+          "no_repeat_ngram_size": 3,
+          "early_stopping": true,
+          "forced_bos_token_id": 256047
+        },
+        "profile": "source_aligned"
+      },
+      "reason": null
+    },
+    "nllb_short_greedy": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "short",
+        "prompt_chars": 19,
+        "decoding": "greedy_control",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 0.4678002200089395,
+        "latency_pstdev_s": 0.006095242602838548,
+        "latency_cv": 0.013029584728972702,
+        "output_tokens": 9,
+        "tokens_per_s": 19.23898197360406,
+        "durations_s": [
+          0.4593195599736646,
+          0.47070384601829574,
+          0.4733772540348582
+        ],
+        "generate_kwargs": {
+          "do_sample": false,
+          "max_new_tokens": 64
+        },
+        "profile": "control"
+      },
+      "reason": null
+    },
+    "nllb_mid_greedy": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "mid",
+        "prompt_chars": 63,
+        "decoding": "greedy_control",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 0.7046816840108173,
+        "latency_pstdev_s": 0.00257746804293654,
+        "latency_cv": 0.003657634505648616,
+        "output_tokens": 15,
+        "tokens_per_s": 21.286206723332036,
+        "durations_s": [
+          0.7031613450380974,
+          0.7025728049920872,
+          0.7083109020022675
+        ],
+        "generate_kwargs": {
+          "do_sample": false,
+          "max_new_tokens": 64
+        },
+        "profile": "control"
+      },
+      "reason": null
+    },
+    "nllb_long_greedy": {
+      "status": "ok",
+      "value": {
+        "prompt_key": "long",
+        "prompt_chars": 207,
+        "decoding": "greedy_control",
+        "dtype": "fp16",
+        "n": 3,
+        "latency_mean_s": 2.3606675213280446,
+        "latency_pstdev_s": 0.0031068663579681575,
+        "latency_cv": 0.0013160965404481538,
+        "output_tokens": 51,
+        "tokens_per_s": 21.60405882625472,
+        "durations_s": [
+          2.3639241549535654,
+          2.3615935500129126,
+          2.3564848590176553
+        ],
+        "generate_kwargs": {
+          "do_sample": false,
+          "max_new_tokens": 64
+        },
+        "profile": "control"
+      },
+      "reason": null
+    },
+    "chattts_long": {
+      "status": "unavailable",
+      "value": null,
+      "reason": "measured separately by scripts/chattts_bench.py; not duplicated here"
+    }
+  },
+  "whisper_warmup": {
+    "status": "ok",
+    "value": {
+      "description": "1 s silence, language=chinese; includes CUDA/cuDNN first-call initialization",
+      "duration_s": 21.758554917003494,
+      "audio_duration_s": 1.0,
+      "warmup_rtf": 21.758554917003494
+    }
+  },
+  "nllb_setup": {
+    "tokenizer": "NllbTokenizer",
+    "model_path": "/root/src/sample/models/nllb-200",
+    "src_lang": "zho_Hans",
+    "forced_bos_token": "eng_Latn",
+    "forced_bos_token_id": 256047,
+    "dtype": "float16 (.half())",
+    "note": "language tags follow the service defaults; prompts are English because the historical prompt text was English. Only latency is measured, so the mismatch does not affect timing."
+  },
+  "concurrency": {
+    "status": "ok",
+    "value": {
+      "models_resident": [
+        "YOLOv8n (fused)",
+        "Whisper-small FP16",
+        "NLLB-200 FP16"
+      ],
+      "torch_allocated_mb": 2172.646484375,
+      "nvidia_smi_used_mb_raw": "unavailable: FileNotFoundError: [Errno 2] No such file or directory: 'nvidia-smi'",
+      "yolo_latency_mean_ms": 18.19505142630078,
+      "yolo_latency_p99_ms": 23.880689055658877,
+      "yolo_baseline_mean_ms": null,
+      "latencies_ms": [
+        21.298197971191257,
+        21.671144000720233,
+        21.488799015060067,
+        21.995544026140124,
+        18.958150001708418,
+        18.648824014235288,
+        18.661337031517178,
+        23.880689055658877,
+        18.82051205029711,
+        18.335881002712995,
+        18.523282022215426,
+        18.440557993017137,
+        18.536210991442204,
+        18.67589703761041,
+        18.274438043590635,
+        18.700507003813982,
+        18.195906013716012,
+        18.54539499618113,
+        18.0808290024288,
+        17.954487004317343,
+        17.923892999533564,
+        17.729323997627944,
+        17.712811997625977,
+        17.904979991726577,
+        17.863987013697624,
+        18.052827042993158,
+        17.808880016673356,
+        17.746957018971443,
+        17.692810972221196,
+        17.88017898797989,
+        17.690570035483688,
+        18.012570042628795,
+        17.655784031376243,
+        17.55366800352931,
+        17.711883003357798,
+        18.30186299048364,
+        17.854130011983216,
+        17.7866070298478,
+        17.594566044863313,
+        17.411581007763743,
+        17.475520027801394,
+        17.56480400217697,
+        17.341721977572888,
+        17.56653201300651,
+        17.561924003530294,
+        17.295800033025444,
+        17.289494979195297,
+        17.284790985286236,
+        17.278935003560036,
+        17.552516015712172,
+        17.245430033653975,
+        17.549155047163367,
+        17.576260957866907,
+        17.22309202887118,
+        17.75319705484435,
+        17.2299409750849,
+        17.64519198331982,
+        17.44435098953545,
+        17.1381599502638,
+        17.10980699863285
+      ],
+      "memory_measurement_note": "torch.cuda.memory_allocated covers PyTorch only; Jetson has no nvidia-smi. Not comparable to the historical 1782 MB estimator.",
+      "profile": "source_aligned"
+    },
+    "reason": null
+  },
+  "historical_reference_full": {
+    "yolo_320_15w": {
+      "fps": 26.6,
+      "mean_ms": 37.6,
+      "p99_ms": 84.0,
+      "n": 60
+    },
+    "yolo_640_15w": {
+      "fps": 16.3,
+      "mean_ms": 61.2,
+      "n": 60
+    },
+    "whisper_10s_15w": {
+      "rtf": 0.091
+    },
+    "whisper_2s_clip": {
+      "rtf": 0.44
+    },
+    "nllb_single_model_15w": {
+      "short_s": 0.42,
+      "short_cv": 0.005,
+      "mid_s": 1.02,
+      "mid_cv": 0.098,
+      "long_s": 1.55,
+      "long_cv": 0.008,
+      "tokens_per_s": "24-27",
+      "runs_per_length": 5
+    },
+    "chattts_long": {
+      "rtf": 2.51,
+      "realtime": false
+    },
+    "three_model_concurrency": {
+      "gpu_memory_mb": 1782,
+      "models": [
+        "YOLOv8n@320",
+        "Whisper-small",
+        "NLLB-200"
+      ],
+      "yolo_mean_ms": 59.0,
+      "yolo_p99_ms": 173.5,
+      "yolo_baseline_mean_ms": 37.6
+    },
+    "power_sensitivity": {
+      "yolo_320_fps": {
+        "15W": 26.6,
+        "MAXN": 28.0
+      },
+      "whisper_10s_rtf": {
+        "15W": 0.091,
+        "MAXN": 0.032
+      },
+      "nllb_short_s": {
+        "15W": 1.33,
+        "MAXN": 0.66
+      }
+    }
+  },
+  "errors": [],
+  "measurement_attempted": true,
+  "measurement_summary": {
+    "workloads_ok": 10,
+    "workloads_total": 11,
+    "concurrency_ok": true
+  }
+}

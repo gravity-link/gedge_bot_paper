@@ -1,0 +1,172 @@
+{
+  "schema": "gedgebot.bench_ai.rebuilt.v1",
+  "generated_at_utc": "2026-11-07T08:55:12.736148+00:00",
+  "timestamp_unix": 1794041712.73704,
+  "script": "/Users/henryluo/lobsterai/project/paper/scripts/bench_ai.py",
+  "script_sha256": "fc1bd2f70c93b124bcbf1141f5d5cf8ea9a170114e104e4a65612d421a30b6db",
+  "mode": "probe",
+  "evidence_status": "local_probe_no_measurement",
+  "device_measurement": false,
+  "citation_allowed": false,
+  "evidence_note": "Reconstructed script, not a recovered October 2026 artifact. Local probe runs do not measure the robot or any AI model and must not be cited as experimental results.",
+  "environment": {
+    "platform": "macOS-15.8.1-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64",
+    "python": "3.13.12 (main, Feb  4 2026, 00:40:20) [Clang 21.1.4 ]",
+    "hostname": "MacBook-Pro.local",
+    "l4t_release": null,
+    "is_jetson": false,
+    "power_mode": "not Jetson",
+    "hf_hub_offline": null,
+    "torch_importable": false,
+    "ultralytics_importable": false,
+    "transformers_importable": false
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "run_id": 1,
+  "condition": {
+    "power_mode_requested": "15W",
+    "power_mode_observed": null,
+    "iterations_per_workload": 60,
+    "nllb_runs_per_length": 5,
+    "hf_hub_offline": null,
+    "model_paths": {
+      "yolo": "/root/src/sample/yolov8n.pt",
+      "whisper": "/root/src/gedge_bot/VoiceAsistant/.hf_cache/hub/models--openai--whisper-small",
+      "nllb": "/root/src/sample/models/nllb-200"
+    }
+  },
+  "workloads": {
+    "yolo_320": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "yolo_640": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "whisper_10s": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "whisper_2s_clip": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "nllb_short": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "nllb_mid": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "nllb_long": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    },
+    "chattts_long": {
+      "status": "not_measured",
+      "value": null,
+      "reason": "local probe; no model was loaded"
+    }
+  },
+  "concurrency": {
+    "status": "not_measured",
+    "value": null,
+    "reason": "local probe; no model was loaded"
+  },
+  "power_sensitivity": {
+    "status": "not_measured",
+    "value": null,
+    "reason": "requires two separate runs at 15 W and MAXN; this script does not switch power modes"
+  },
+  "historical_bench_ai": {
+    "yolo_320_15w": {
+      "fps": 26.6,
+      "mean_ms": 37.6,
+      "p99_ms": 84.0,
+      "n": 60
+    },
+    "yolo_640_15w": {
+      "fps": 16.3,
+      "mean_ms": 61.2,
+      "n": 60
+    },
+    "whisper_10s_15w": {
+      "rtf": 0.091
+    },
+    "whisper_2s_clip": {
+      "rtf": 0.44
+    },
+    "nllb_single_model_15w": {
+      "short_s": 0.42,
+      "short_cv": 0.005,
+      "mid_s": 1.02,
+      "mid_cv": 0.098,
+      "long_s": 1.55,
+      "long_cv": 0.008,
+      "tokens_per_s": "24-27",
+      "runs_per_length": 5
+    },
+    "chattts_long": {
+      "rtf": 2.51,
+      "realtime": false
+    },
+    "three_model_concurrency": {
+      "gpu_memory_mb": 1782,
+      "models": [
+        "YOLOv8n@320",
+        "Whisper-small",
+        "NLLB-200"
+      ],
+      "yolo_mean_ms": 59.0,
+      "yolo_p99_ms": 173.5,
+      "yolo_baseline_mean_ms": 37.6
+    },
+    "power_sensitivity": {
+      "yolo_320_fps": {
+        "15W": 26.6,
+        "MAXN": 28.0
+      },
+      "whisper_10s_rtf": {
+        "15W": 0.091,
+        "MAXN": 0.032
+      },
+      "nllb_short_s": {
+        "15W": 1.33,
+        "MAXN": 0.66
+      }
+    }
+  },
+  "errors": [],
+  "measurement_attempted": false
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "gedgebot.chattts_bench.v1",
+  "generated_at_utc": "2026-11-07T10:15:12.461710+00:00",
+  "timestamp_unix": 1794046512.461767,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/chattts_bench.py",
+  "script_sha256": "2ef00b34ca3f172354026da2e06506c2e73759de0d9325ac36cb6ee5e3bce999",
+  "mode": "device",
+  "evidence_status": "device_measurement_partial",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "New ChatTTS synthesis measured on the Xavier with the device's own compatibility patch. Audio duration was observed from the generated waveform; this is NOT the recovered October run.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MAXN\n0",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "condition": {
+    "power_mode_requested": "MAXN",
+    "sample_rate_hz": 24000,
+    "text_chars": 85,
+    "rtf_definition": "synthesis_wall_time_s / synthesized_audio_duration_s",
+    "snapshot_root": "/root/src/gedge_bot/VoiceAsistant/.hf_cache/hub/models--2Noise--ChatTTS/snapshots",
+    "hf_hub_offline": "1"
+  },
+  "measurement": {
+    "status": "ok",
+    "value": {
+      "text_chars": 85,
+      "snapshot": "/root/src/gedge_bot/VoiceAsistant/.hf_cache/hub/models--2Noise--ChatTTS/snapshots/1a3c04a8b0651689bd9242fbb55b1f4b5a9aef84",
+      "model_load_s": 10.673467183019966,
+      "synthesis_s": 47.76493735302938,
+      "audio_samples": 384460,
+      "audio_duration_s": 16.019166666666667,
+      "rtf": 2.9817367124608674,
+      "realtime": false,
+      "torch": "2.1.0a0+41361538.nv23.06",
+      "cuda": "11.4",
+      "device": "Xavier"
+    },
+    "reason": null
+  },
+  "historical_chattts": {
+    "rtf": 2.51,
+    "realtime": false
+  },
+  "errors": []
+}

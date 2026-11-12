@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+*.bak
+.venv/
+build/
+dist/
+
+# Never publish: private patent materials, proprietary runtime source
+# snapshots, internal audit notes and raw device captures.
+materials/
+*.current.py
+*.current.c
+*.current.txt
+source_manifest.json
+source_tree.current.txt
+source_audit.md
+reference_audit.md
+ziJPFatU
+*.wav
+*.log

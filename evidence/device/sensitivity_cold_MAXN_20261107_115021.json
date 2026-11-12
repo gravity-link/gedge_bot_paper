@@ -1,0 +1,109 @@
+{
+  "schema": "gedgebot.sensitivity.v1",
+  "generated_at_utc": "2026-11-07T11:50:23.103432+00:00",
+  "timestamp_unix": 1794052223.103627,
+  "script": "/mnt/nvme_data/gedge_bot_validation_20261107/paper/scripts/sensitivity_bench.py",
+  "script_sha256": "5d19eeb1fb71757c391ff797c0935bf43da3d6945d3f521720e99d75e1459f24",
+  "mode": "device",
+  "evidence_status": "device_measurement_partial",
+  "device_measurement": true,
+  "citation_allowed": false,
+  "evidence_note": "NEW 2026-11-07 device measurement varying inference parameters to explain discrepancies between the October transcription and the November rebuilt/source-aligned runs. It does NOT recover or reproduce the October experiment; the original audio, prompts and scripts remain unavailable. citation_allowed=false until manual review.",
+  "environment": {
+    "platform": "Linux-5.10.216-tegra-aarch64-with-glibc2.29",
+    "machine": "aarch64",
+    "python": "3.8.10 (default, Mar 17 2025, 19:35:05) \n[GCC 9.4.0]",
+    "hostname": "jetson",
+    "l4t_release": "# R35 (release), REVISION: 6.2, GCID: 40633251, BOARD: t186ref, EABI: aarch64, DATE: Fri May 16 02:08:18 UTC 2025",
+    "is_jetson": true,
+    "power_mode": "NV Power Mode: MAXN\n0",
+    "hf_hub_offline": "1",
+    "torch_importable": true,
+    "ultralytics_importable": true,
+    "transformers_importable": true
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "profile": "parameter_sensitivity",
+  "source_root": "/root/src/gedge_bot",
+  "source_commit": "c25b444b830214f062b08a96dc3b4d7ffa731a0f",
+  "condition": {
+    "power_mode_requested": "MAXN",
+    "power_mode_observed": "NV Power Mode: MAXN\n0",
+    "repeats_per_case": 3,
+    "whisper_profiles": [
+      "fp32_no_warm"
+    ],
+    "components": [
+      "whisper"
+    ],
+    "whisper_model": "/root/gedge_bot_validation_20261107/models/whisper-small",
+    "nllb_model": "/root/src/sample/models/nllb-200",
+    "audio": "/root/gedge_bot_validation_20261107/paper/evidence/bench_audio_10s.wav",
+    "hf_hub_offline": "1",
+    "audio_duration_s": 10.0
+  },
+  "targets": {
+    "whisper_10s_rtf_october_15w": 0.091,
+    "nllb_short_s_single_model_15w": 0.42,
+    "nllb_short_s_power_table_15w": 1.33,
+    "note": "Historical values are transcribed, not measurements; they are comparison targets only and are never pooled with new data."
+  },
+  "whisper": {
+    "fp32_no_warm": {
+      "dtype": "fp32",
+      "warmup": false,
+      "language_hint": "chinese",
+      "model_path": "/root/gedge_bot_validation_20261107/models/whisper-small",
+      "sampling_rate": 16000,
+      "warmup_call_s": null,
+      "cold_first_call_s": 20.86234830700002,
+      "clips": {
+        "10s": {
+          "audio_duration_s": 10.0,
+          "n": 3,
+          "processing_mean_s": 1.3813650006666573,
+          "processing_pstdev_s": 0.21143726292597678,
+          "processing_s": [
+            1.192273212999993,
+            1.275307314999992,
+            1.6765144739999869
+          ],
+          "rtf": 0.13813650006666572,
+          "rtf_cold_first_call": 2.086234830700002
+        }
+      }
+    }
+  },
+  "nllb": {
+    "cases": {}
+  },
+  "errors": [],
+  "measurement_summary": {
+    "whisper_profiles": [
+      "fp32_no_warm"
+    ],
+    "whisper_clip_cases": 1,
+    "nllb_cases": 0
+  }
+}

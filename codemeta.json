@@ -1,0 +1,31 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "GEdgeBot paper reproduction artifacts",
+  "description": "Benchmark, replay, static-audit and analysis scripts plus measured evidence records accompanying arXiv:2611.11698.",
+  "version": "1.0.0",
+  "dateCreated": "2026-11-12",
+  "license": [
+    "https://spdx.org/licenses/MIT.html",
+    "https://creativecommons.org/licenses/by/4.0/"
+  ],
+  "codeRepository": "https://github.com/gravity-link/gedge_bot_paper",
+  "programmingLanguage": ["Python", "Bash", "TeX"],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Hongyu",
+      "familyName": "Luo",
+      "@id": "https://orcid.org/0009-0002-0152-2970"
+    },
+    { "@type": "Person", "givenName": "Sun", "familyName": "Tie" },
+    { "@type": "Person", "givenName": "John", "familyName": "Wang" }
+  ],
+  "keywords": ["edge AI", "Jetson", "service robot", "benchmark", "reproducibility"],
+  "referencePublication": {
+    "@type": "ScholarlyArticle",
+    "@id": "https://doi.org/10.48550/arXiv.2611.11698",
+    "name": "Compute Regeneration through Re-Productization: Reorganizing Retired Edge AI Silicon into a Delivered Multilingual Service Robot",
+    "url": "https://arxiv.org/abs/2611.11698"
+  }
+}

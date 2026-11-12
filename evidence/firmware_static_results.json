@@ -1,0 +1,11 @@
+{
+  "schema": "gedgebot.firmware_static_audit.v1",
+  "mcu_sha256": "978d551c8655385f585e014a08b910f89332085d4a0ac5b71934c99bd6f7885e",
+  "host_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+  "tests_run": 6,
+  "failures": 0,
+  "errors": 0,
+  "dynamic_drop_observed": false,
+  "finding": "Host emits a second counter-head frame after the body write; MCU TurnBody blocks, IRQ buffers bytes, and ProcessCommand resets rx_idx after motion. The MCU's in-routine counter-turn is fixed at 15 pulses rather than the host-computed head pulse. Static structure establishes a queue/execution gap, not an observed physical trajectory.",
+  "timestamp_unix": 1794017404.404887
+}

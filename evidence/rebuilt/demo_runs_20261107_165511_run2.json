@@ -1,0 +1,103 @@
+{
+  "schema": "gedgebot.demo_run.rebuilt.v1",
+  "generated_at_utc": "2026-11-07T08:55:21.742882+00:00",
+  "timestamp_unix": 1794041721.743259,
+  "script": "/Users/henryluo/lobsterai/project/paper/scripts/demo_capture.py",
+  "script_sha256": "3c0f1792e658a5d2cbb5db41b252acf9c7f8f4c2d4ef00e369ae3b8431818548",
+  "mode": "probe",
+  "evidence_status": "local_probe_no_measurement",
+  "device_measurement": false,
+  "citation_allowed": false,
+  "evidence_note": "Reconstructed script, not a recovered October 2026 artifact. Local probe runs do not measure the robot or any AI model and must not be cited as experimental results.",
+  "environment": {
+    "platform": "macOS-15.8.1-x86_64-i386-64bit-Mach-O",
+    "machine": "x86_64",
+    "python": "3.13.12 (main, Feb  4 2026, 00:40:20) [Clang 21.1.4 ]",
+    "hostname": "MacBook-Pro.local",
+    "l4t_release": null,
+    "is_jetson": false,
+    "power_mode": "not Jetson",
+    "hf_hub_offline": null,
+    "torch_importable": false,
+    "ultralytics_importable": false,
+    "transformers_importable": false
+  },
+  "historical_reference": {
+    "status": "transcribed_historical_value_not_recovered_measurement",
+    "source": "ExtendedAbstract_ComputeRegeneration_Luo.pdf v1.0 (2026-10-17), also transcribed in paper/main.tex Sec. 6",
+    "measured_on": "2026-10-15..2026-10-17, single Jetson AGX Xavier prototype"
+  },
+  "discrepancy_register": [
+    {
+      "id": "NLLB_SHORT_CONFLICT",
+      "description": "NLLB-200 short-text latency at 15 W is 0.42 s in the single-model table but 1.33 s in the power-sensitivity table. Prompt text, run id and raw logs are lost.",
+      "resolution": "unresolved; paper/main.tex excludes the 2.0x NLLB power scaling from quantitative conclusions"
+    },
+    {
+      "id": "MIC_FRAME_SPEC_DRIFT",
+      "description": "Extended Abstract describes a mic frame with header/seq/CRC/tail; the captured runtime uses FF A5 | 01 00 | len | cmd | sub | payload | checksum.",
+      "resolution": "rebuilt scripts target the captured runtime protocol"
+    },
+    {
+      "id": "MOTOR_FRAME_SPEC_DRIFT",
+      "description": "The captured motor frame is seven bytes with no sequence number and no CRC field.",
+      "resolution": "rebuilt protocol guard checks the seven-byte form"
+    }
+  ],
+  "run": {
+    "run_id": 2,
+    "window_id": "w2",
+    "trigger_unix": null,
+    "follow_start_unix": null,
+    "trigger_to_follow_latency_s": null,
+    "doa_turn_angle_deg": null,
+    "follow_segment": {
+      "duration_s": null,
+      "ended_by": null
+    },
+    "voice_assistant_ready": null,
+    "perception": {
+      "yolo_fps": null,
+      "inference_ms": null
+    },
+    "success": null,
+    "notes": null
+  },
+  "capture_declaration": {
+    "microphone_opened": false,
+    "camera_opened": false,
+    "motor_device_opened": false,
+    "robot_motion_observed": null,
+    "statement": "Automatic capture of the physical product loop is deliberately not implemented in the rebuilt script."
+  },
+  "historical_demo": {
+    "runs": 6,
+    "capture_windows": 5,
+    "success_rate": "6/6",
+    "trigger_to_follow_mean_s": 4.35,
+    "spread_s": 0.19,
+    "p50_s": 4.42,
+    "min_s": 3.95,
+    "max_s": 4.43,
+    "cv_percent": 4.5,
+    "doa_turn_angles_deg": [
+      90,
+      -53,
+      104,
+      110,
+      -97,
+      114
+    ],
+    "follow_segments": [
+      "120 s x3",
+      "30 s x2",
+      "window-end x1"
+    ],
+    "perception": {
+      "yolo_fps": 17.7,
+      "inference_ms": 37
+    },
+    "voice_degraded": true
+  },
+  "errors": []
+}

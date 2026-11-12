@@ -1,0 +1,18 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\small, box/.style={draw, align=center, inner sep=4pt}, flow/.style={-{Latex[length=2mm]}, thick}]
+\node[box, fill=gray!12, minimum width=17mm, minimum height=12mm] (recycle) at (0,0) {Recycle\\material};
+\node[box, fill=blue!6, minimum width=17mm, minimum height=18mm] (refurbish) at (1.85,0.35) {Refurbish\\same role};
+\node[box, fill=green!7, minimum width=17mm, minimum height=24mm] (repurpose) at (3.7,0.7) {Repurpose\\new task};
+\node[box, fill=orange!12, minimum width=20mm, minimum height=30mm] (reproduct) at (5.75,1.15) {Re-productize\\new system};
+\draw[flow] (recycle) -- (refurbish);
+\draw[flow] (refurbish) -- (repurpose);
+\draw[flow] (repurpose) -- (reproduct);
+\node[below=2mm of recycle, font=\footnotesize] {silicon destroyed};
+\node[below=2mm of refurbish, font=\footnotesize, text width=20mm, align=center] {OEM limits retained};
+\node[below=2mm of repurpose, font=\footnotesize, text width=22mm, align=center] {product constraints retained};
+\node[below=2mm of reproduct, font=\footnotesize, text width=25mm, align=center] {only the compute core retained};
+\end{tikzpicture}
+\caption{The proposed value-capture ladder is a systems-design distinction, not a measured ranking of economic or environmental benefit. Re-productization preserves the compute module while redesigning the product organization around it; in this case an AI box becomes the compute core of a delivered service robot.}
+\label{fig:ladder}
+\end{figure}

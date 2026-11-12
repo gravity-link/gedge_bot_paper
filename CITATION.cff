@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use these artifacts, please cite the accompanying paper."
+type: software
+title: "GEdgeBot paper reproduction artifacts"
+abstract: "Benchmark, replay, static-audit and analysis scripts plus measured evidence records accompanying arXiv:2611.11698."
+authors:
+  - family-names: Luo
+    given-names: Hongyu
+    orcid: "https://orcid.org/0009-0002-0152-2970"
+  - family-names: Tie
+    given-names: Sun
+  - family-names: Wang
+    given-names: John
+version: 1.0.0
+date-released: 2026-11-12
+license:
+  - MIT
+  - CC-BY-4.0
+repository-code: "https://github.com/gravity-link/gedge_bot_paper"
+url: "https://arxiv.org/abs/2611.11698"
+keywords:
+  - edge AI
+  - Jetson
+  - service robot
+  - benchmark
+  - reproducibility
+  - software-in-the-loop replay
+preferred-citation:
+  type: article
+  title: "Compute Regeneration through Re-Productization: Reorganizing Retired Edge AI Silicon into a Delivered Multilingual Service Robot"
+  authors:
+    - family-names: Luo
+      given-names: Hongyu
+      orcid: "https://orcid.org/0009-0002-0152-2970"
+    - family-names: Tie
+      given-names: Sun
+    - family-names: Wang
+      given-names: John
+  year: 2026
+  journal: "arXiv preprint"
+  doi: "10.48550/arXiv.2611.11698"
+  url: "https://arxiv.org/abs/2611.11698"
+  eprint: "2611.11698"
+  archivePrefix: arXiv
+  primaryClass: cs.RO

@@ -1,0 +1,6 @@
+# Minimal dependencies for analysis, replay and JSON aggregation (Python 3.8+).
+# The on-device AI benchmarks additionally require torch / torchvision /
+# transformers / ultralytics / opencv-python / soundfile and the corresponding
+# model weights; those are NOT installed by this file. See REPRODUCING.md.
+numpy>=1.21
+psutil>=5.9

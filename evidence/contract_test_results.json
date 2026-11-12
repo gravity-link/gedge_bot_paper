@@ -1,0 +1,10 @@
+{
+  "source": "/Users/henryluo/lobsterai/project/paper/evidence/robot_runtime.current.py",
+  "source_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+  "tests_run": 17,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "motor_device_opened": false,
+  "timestamp_unix": 1794015116.886844
+}

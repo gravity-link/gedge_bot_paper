@@ -1,0 +1,34 @@
+{
+  "mode": "probe",
+  "firmware_dispatched_cmds": [
+    "0x01",
+    "0x02",
+    "0x03",
+    "0x04",
+    "0x05",
+    "0x06",
+    "0x07",
+    "0x08",
+    "0x09"
+  ],
+  "firmware_case_parse_error": null,
+  "noop_cmd": "0x00",
+  "noop_is_inert": true,
+  "link_inventory": {
+    "device": "/dev/ttyUSB0",
+    "exists": true,
+    "usb_bridge": "Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub\nBus 001 Device 007: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial adapter\nBus 001 Device 006: ID 0483:5741 STMicroelectronics \nBus 001 Device 005: ID 2bc5:0401  USB2.0 Hub\nBus 001 Device 004: ID 05e3:0608 Genesys Logic, Inc. Hub\nBus 001 Device 003: ID 0483:3748 STMicroelectronics ST-LINK/V2\nBus 001 Device 002: ID 05e3:0608 Genesys Logic, Inc. Hub\nBus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub",
+    "by_id": [
+      "usb-1a86_USB_Serial-if00-port0",
+      "usb-XXXXXXXXX.CN-STMicroelectronics_XXXXXXXXX-STM32_Virtual_COM_Port_48DD725C3531-if00"
+    ],
+    "termios_speed": {
+      "ispeed": 13,
+      "ospeed": 13,
+      "B9600": 13
+    },
+    "iflag": 0,
+    "lflag": 2608,
+    "logic_analyser_tools": []
+  }
+}

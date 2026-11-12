@@ -1,0 +1,23 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[font=\footnotesize, x=0.65cm, y=0.65cm]
+\draw[-{Latex[length=2mm]}] (0,0) -- (9.5,0) node[right] {time};
+\node[anchor=east] at (-0.15,3.3) {Head pan};
+\node[anchor=east] at (-0.15,1.9) {Chassis};
+\node[anchor=east] at (-0.15,0.6) {Camera ray};
+\fill[blue!20] (0.6,3.0) rectangle (3.1,3.6);
+\fill[red!18] (3.3,3.0) rectangle (6.5,3.6);
+\fill[orange!25] (3.3,1.6) rectangle (6.5,2.2);
+\draw[green!50!black, very thick] (0.6,0.3) -- (3.1,0.9) -- (6.5,0.9) -- (7.5,0.9);
+\node at (1.85,3.3) {pre-turn $+h$};
+\node at (4.9,3.3) {counter-turn $-h$};
+\node at (4.9,1.9) {body turn $+b$};
+\node[green!50!black] at (4.9,0.55) {approximately fixed on speaker};
+\draw[dashed] (3.2,-0.15) -- (3.2,3.9);
+\draw[dashed] (6.6,-0.15) -- (6.6,3.9);
+\node at (3.2,4.15) {body frame written};
+\node at (6.6,4.15) {settle};
+\end{tikzpicture}
+\caption{Host-side intent of the sound-orientation callback in \texttt{orient\_to\_sound}. The drawing expresses intended kinematic cancellation, not a measured trajectory. The audited MCU's blocking receive/reset logic does not reliably queue the second host command; its in-routine counter-turn is fixed at 15 pulses.}
+\label{fig:orchestration}
+\end{figure}

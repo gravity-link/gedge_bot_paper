@@ -1,0 +1,266 @@
+{
+  "schema": "gedgebot.boundary_isolation.v1",
+  "generated_at_utc": "2026-11-07T13:01:46.774256+00:00",
+  "script": "/Users/henryluo/lobsterai/project/paper/scripts/boundary_isolation.py",
+  "script_sha256": "39514e86328a433b52f056def87bc95d7a0d63a03be72f5f61c5405e3cedb6c4",
+  "analysis_type": "trace_driven_contract_analysis",
+  "physical_measurement": false,
+  "device_measurement": false,
+  "citation_allowed": false,
+  "evidence_note": "Only the host-side frame timestamps are measurements (Xavier, 2026-11-07). Execution-side quantities are derived from the audited firmware contract and are NOT logic-analyser observations. Never describe them as physical measurements, and never pool them with the transcribed October 2026 values.",
+  "assumptions": [
+    "All seven-byte frames arrive intact and in order (verified for every input run).",
+    "The MCU local delay_ms() clock is stable and independent of Xavier load.",
+    "The captured firmware snapshot is the one executed by the controller.",
+    "No hardware watchdog or command timeout exists, as stated in main.tex L225."
+  ],
+  "analysis": {
+    "integrity": {
+      "runs_total": 30,
+      "runs_with_exact_frame_sequence": 30,
+      "frames_analysed": 6000,
+      "runs_with_physical_motor_writes": [],
+      "transport": [
+        "POSIX pseudo-terminal; os.write only, no tcdrain or physical UART"
+      ]
+    },
+    "contract_checks": {
+      "speed_normal_35": true,
+      "pulse_gap_8": true,
+      "mpan_fixed_15": true,
+      "turnbody_loop_bounded_by_pulse_count": true,
+      "stop_all_after_loop": true,
+      "trailing_settle_1000": true,
+      "pulse_field_is_16bit": true,
+      "firmware_does_not_clamp_pulse": true,
+      "host_clamps_body_pulse": true,
+      "host_frame_clamps_to_0xffff": true,
+      "no_seq_or_crc_in_frame": true
+    },
+    "source_hashes": {
+      "firmware_sha256": "978d551c8655385f585e014a08b910f89332085d4a0ac5b71934c99bd6f7885e",
+      "runtime_sha256": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5"
+    },
+    "firmware_constants": {
+      "speed_normal_ms": 35,
+      "pulse_gap_ms": 8,
+      "turn_pulse_period_ms": 43,
+      "mpan_pulse_count": 15,
+      "trailing_settle_ms": 1000,
+      "runtime_body_pulse_max": 25,
+      "frame_pulse_field_max": 65535
+    },
+    "groups": [
+      {
+        "mode": "MAXN",
+        "condition": "B_idle",
+        "runs": 6,
+        "frames": 1200,
+        "host_pstdev_ms": 0.09524147353665943,
+        "host_p99_abs_deviation_ms": 0.0831670000000031,
+        "host_max_abs_deviation_ms": 2.6129839999999973,
+        "run_level_p99_ms": {
+          "min": 0.05075800000000186,
+          "median": 0.07672150000000144,
+          "max": 0.8709259999999972
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 0.0831670000000031,
+          "pulse_train_max_abs_deviation_ms": 2.6129839999999973,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 0.0831670000000031,
+          "command_start_phase_max_abs_deviation_ms": 2.6129839999999973,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      },
+      {
+        "mode": "MAXN",
+        "condition": "A_ai_loaded",
+        "runs": 6,
+        "frames": 1200,
+        "host_pstdev_ms": 0.3424476913350514,
+        "host_p99_abs_deviation_ms": 0.23259099999999933,
+        "host_max_abs_deviation_ms": 5.590983999999999,
+        "run_level_p99_ms": {
+          "min": 0.0637439999999998,
+          "median": 0.2039395000000006,
+          "max": 2.907721000000002
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 0.23259099999999933,
+          "pulse_train_max_abs_deviation_ms": 5.590983999999999,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 0.23259099999999933,
+          "command_start_phase_max_abs_deviation_ms": 5.590983999999999,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      },
+      {
+        "mode": "MAXN",
+        "condition": "C_cpu_load",
+        "runs": 2,
+        "frames": 400,
+        "host_pstdev_ms": 0.7749083895247727,
+        "host_p99_abs_deviation_ms": 0.08963099999999713,
+        "host_max_abs_deviation_ms": 10.964233,
+        "run_level_p99_ms": {
+          "min": 0.07660599999999818,
+          "median": 0.09931650000000047,
+          "max": 0.12202700000000277
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 0.08963099999999713,
+          "pulse_train_max_abs_deviation_ms": 10.964233,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 0.08963099999999713,
+          "command_start_phase_max_abs_deviation_ms": 10.964233,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      },
+      {
+        "mode": "15W",
+        "condition": "B_idle",
+        "runs": 8,
+        "frames": 1600,
+        "host_pstdev_ms": 0.8706561820519662,
+        "host_p99_abs_deviation_ms": 3.4025570000000016,
+        "host_max_abs_deviation_ms": 14.481563000000001,
+        "run_level_p99_ms": {
+          "min": 0.09538100000000327,
+          "median": 0.9845790000000001,
+          "max": 5.669851000000001
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 3.4025570000000016,
+          "pulse_train_max_abs_deviation_ms": 14.481563000000001,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 3.4025570000000016,
+          "command_start_phase_max_abs_deviation_ms": 14.481563000000001,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      },
+      {
+        "mode": "15W",
+        "condition": "A_ai_loaded",
+        "runs": 6,
+        "frames": 1200,
+        "host_pstdev_ms": 1.3767488356538573,
+        "host_p99_abs_deviation_ms": 5.100526000000002,
+        "host_max_abs_deviation_ms": 25.270416999999995,
+        "run_level_p99_ms": {
+          "min": 0.21510800000000074,
+          "median": 3.2305390000000003,
+          "max": 14.041976000000005
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 5.100526000000002,
+          "pulse_train_max_abs_deviation_ms": 25.270416999999995,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 5.100526000000002,
+          "command_start_phase_max_abs_deviation_ms": 25.270416999999995,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      },
+      {
+        "mode": "15W",
+        "condition": "C_cpu_load",
+        "runs": 2,
+        "frames": 400,
+        "host_pstdev_ms": 0.12400753122645347,
+        "host_p99_abs_deviation_ms": 0.11446200000000317,
+        "host_max_abs_deviation_ms": 1.6297009999999972,
+        "run_level_p99_ms": {
+          "min": 0.06663600000000258,
+          "median": 0.3203434999999999,
+          "max": 0.5740509999999972
+        },
+        "direct_linux": {
+          "pulse_train_p99_abs_deviation_ms": 0.11446200000000317,
+          "pulse_train_max_abs_deviation_ms": 1.6297009999999972,
+          "host_jitter_transfer_ratio": 1.0,
+          "basis": "counterfactual: pulse cadence equals host frame cadence"
+        },
+        "finite_pulse_offload": {
+          "host_jitter_transfer_to_pulse_train_ratio": 0.0,
+          "pulse_train_p99_abs_deviation_ms_from_host_jitter": 0.0,
+          "command_start_phase_p99_abs_deviation_ms": 0.11446200000000317,
+          "command_start_phase_max_abs_deviation_ms": 1.6297009999999972,
+          "basis": "contract: N pulses on the MCU local clock, then StopAllMotors"
+        }
+      }
+    ],
+    "bounded_stopping": {
+      "definition": "Upper bound on motion remaining after the host stops sending: at most the pulse count of the command already executing, each pulse taking SPEED_NORMAL + gap on the MCU clock, then StopAllMotors() and a 1000 ms settle delay.",
+      "formula_s": "N * (35 + 8) / 1000",
+      "cases": [
+        {
+          "case": "runtime head minimum",
+          "pulse_count": 5,
+          "origin": "host clamp lower bound",
+          "turnbody_residual_motion_s": 0.215,
+          "turnbody_residual_motion_min": 0.0
+        },
+        {
+          "case": "MCU fixed counter-head",
+          "pulse_count": 15,
+          "origin": "firmware MPAN_PULSE_COUNT",
+          "turnbody_residual_motion_s": 0.645,
+          "turnbody_residual_motion_min": 0.01
+        },
+        {
+          "case": "runtime body maximum",
+          "pulse_count": 25,
+          "origin": "host clamp upper bound",
+          "turnbody_residual_motion_s": 1.075,
+          "turnbody_residual_motion_min": 0.02
+        },
+        {
+          "case": "largest 16-bit frame value",
+          "pulse_count": 65535,
+          "origin": "accepted by firmware, no clamp",
+          "turnbody_residual_motion_s": 2818.005,
+          "turnbody_residual_motion_min": 46.97
+        }
+      ],
+      "finding": {
+        "id": "FIRMWARE_HAS_NO_PULSE_UPPER_BOUND",
+        "status": "static_source_finding_plus_analytical_bound",
+        "description": "ProcessCommand() parses a 16-bit pulse field and passes it directly to TurnBody()/MoveForward() without clamping. The finite-pulse boundedness therefore comes from the host-side clamp (max 25 body pulses in the audited runtime), not from the MCU execution boundary. Because the seven-byte frame has neither a sequence number nor a CRC, a corrupted pulse field is not detected by the controller.",
+        "worst_case_turnbody_residual_motion_s": 2818.005,
+        "worst_case_turnbody_residual_motion_min": 46.97,
+        "persistent_velocity_counterfactual": "unbounded: no command timeout or hardware watchdog is implemented (main.tex L225), so motion would continue until an external stop",
+        "physical_verification": "not performed; requires a logic analyser and a secured robot"
+      }
+    },
+    "conclusion": {
+      "what_the_boundary_isolates": "pulse-train cadence inside a command, and runaway motion after the host stops (bounded by the command's pulse count)",
+      "what_it_does_not_isolate": "the start-phase jitter of a command, which still equals the measured host-side frame deviation",
+      "caveat": "The 1:1 and 0:1 transfer ratios are consequences of the two execution contracts, not empirical estimates. Only the host-side frame timestamps are measurements."
+    }
+  }
+}

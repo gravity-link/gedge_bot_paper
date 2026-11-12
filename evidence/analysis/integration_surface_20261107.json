@@ -1,0 +1,163 @@
+{
+  "schema": "gedgebot.integration_surface.v1",
+  "generated_at_utc": "2026-11-07T13:01:49.750500+00:00",
+  "script_sha256": "962db6076cb9fe7ab113c81bb128e1fbaf39c6056f84ffccf4479a5dafd52a56",
+  "analysis_type": "source_grounded_integration_audit",
+  "physical_measurement": false,
+  "device_measurement": false,
+  "citation_allowed": false,
+  "evidence_note": "Static inventory of read-only source snapshots plus the list of AI workloads actually measured on 2026-11-07. Presence of a service, language mapping or driver is NOT proof of end-to-end product success. No economic, deployment or environmental benefit is quantified.",
+  "source_commit": "c25b444b830214f062b08a96dc3b4d7ffa731a0f",
+  "source_hashes": {
+    "source_config.current.py": "013ec413da5934a8f04e1c0b74a7a0c394a094ecd02efe7e4b8f999d239c0d1f",
+    "source_tree.current.txt": "ecb7ba1f4c53e31b012d31b824adcd053e3b1d17066e532dc8edb971a6902c7e",
+    "source_README.current.md": "355ad3b5adaff0dc8f24bdb220918f86dda9b6b6d6b893a10ec17922385fb31f",
+    "robot_runtime.current.py": "d80196b650217cf0e76578855538ab496c7274be4c74766b5b24dc18dc89b9f5",
+    "motor_uart_vision.current.c": "978d551c8655385f585e014a08b910f89332085d4a0ac5b71934c99bd6f7885e"
+  },
+  "product_description_from_source_readme": "gedge_bot, wheel robot with GEdgeUltral AI box.",
+  "integration_surface": {
+    "active_on_device_ai_services": 5,
+    "active_service_files": [
+      "./common-ai-services/asr_service/service.py",
+      "./common-ai-services/translation_service/service.py",
+      "./common-ai-services/tts_service/service.py",
+      "./common-ai-services/vision_service/service.py",
+      "./common-ai-services/voice_assistant_service/service.py"
+    ],
+    "excluded_broken_services": [
+      "./common-ai-services/voice_assistant_service.broken/service.py"
+    ],
+    "languages_with_all_three_mappings": [
+      "en",
+      "ja",
+      "km",
+      "ko",
+      "my",
+      "th",
+      "zh-CN"
+    ],
+    "language_count": 7,
+    "language_table_sizes": {
+      "whisper_lang_map": 7,
+      "nllb_lang_map": 7,
+      "tts_voices": 7
+    },
+    "enabled_service_flags": {
+      "enable_asr": true,
+      "enable_translation": false,
+      "enable_tts": true,
+      "enable_vision": true
+    },
+    "model_defaults": {
+      "asr_model": "openai/whisper-small",
+      "mt_model_path": "facebook/nllb-200-distilled-600M",
+      "yolo_model_path": "/mnt/nvme120/root/src/sample/yolov8n.pt",
+      "use_cuda": true,
+      "use_fp16": true
+    },
+    "kernel_driver_modules": [
+      "ar0143",
+      "ds90ub954"
+    ],
+    "sensing_domains": [
+      "USB microphone array (recovered FF A5 / DOA)",
+      "OpenNI Astra depth camera",
+      "automotive FPD-Link DS90UB953/954 + AR0143 via V4L2"
+    ],
+    "control_boundary": "seven-byte UART frame at 9600 bit/s to STM32F407",
+    "measured_workloads_on_20261107": {
+      "files": 15,
+      "workload_keys": [
+        "nllb_long",
+        "nllb_long_greedy",
+        "nllb_mid",
+        "nllb_mid_greedy",
+        "nllb_short",
+        "nllb_short_greedy",
+        "whisper_10s",
+        "whisper_2s_clip",
+        "yolo_320",
+        "yolo_640"
+      ],
+      "ok_counts": {
+        "yolo_320": 12,
+        "yolo_640": 12,
+        "whisper_10s": 12,
+        "whisper_2s_clip": 12,
+        "nllb_short": 12,
+        "nllb_mid": 12,
+        "nllb_long": 12,
+        "nllb_short_greedy": 8,
+        "nllb_mid_greedy": 8,
+        "nllb_long_greedy": 8
+      }
+    },
+    "runtime_contract_checks": {
+      "model_prewarm": true,
+      "readiness_protocol": true,
+      "microphone_protocol_parser": true,
+      "seven_byte_motor_frame": true,
+      "head_pan": true,
+      "body_turn": true,
+      "sound_orientation_planner": true,
+      "vision_capture_loop": true
+    },
+    "firmware_contract_checks": {
+      "finite_pulse_loop": true,
+      "frame_parser": true,
+      "stop_on_completion": true
+    }
+  },
+  "capability_matrix": [
+    {
+      "function": "Four on-device AI models (YOLO, Whisper, NLLB, ChatTTS)",
+      "module_alone": "yes, measured on 11-07",
+      "module_plus_robot": "retained as the compute core",
+      "integration_asset": "isolated CUDA/PyTorch stack on the frozen BSP",
+      "evidence": "evidence/device/*.json",
+      "status": "measured"
+    },
+    {
+      "function": "Seven-language speech chain (ASR -> MT -> TTS)",
+      "module_alone": "models only, no audio I/O or product role",
+      "module_plus_robot": "configured as five on-device services",
+      "integration_asset": "microphone array, readiness/prewarm protocol, service orchestration",
+      "evidence": "source_config.current.py + robot_runtime.current.py",
+      "status": "configured in source; conversational loop NOT verified end-to-end (voice=False in October demos)"
+    },
+    {
+      "function": "Sound-source orientation and counter-turning",
+      "module_alone": "no",
+      "module_plus_robot": "yes, mechanism-level",
+      "integration_asset": "recovered FF A5 / DOA protocol + seven-byte UART frames",
+      "evidence": "robot_runtime.current.py + motor_uart_vision.current.c",
+      "status": "source mechanism; host/MCU counter-turn queue gap documented"
+    },
+    {
+      "function": "Two-level visual person following",
+      "module_alone": "no",
+      "module_plus_robot": "yes, mechanism-level",
+      "integration_asset": "OpenNI depth camera + head/body pulse state machine",
+      "evidence": "robot_runtime.current.py (plan_sound_orient, _capture_loop)",
+      "status": "source mechanism; no new physical demonstration in this batch"
+    },
+    {
+      "function": "Automotive FPD-Link camera registration",
+      "module_alone": "no",
+      "module_plus_robot": "yes, mechanism-level",
+      "integration_asset": "two kernel driver modules + device-tree / V4L2 graph",
+      "evidence": "source_tree.current.txt (Xavier/drivers)",
+      "status": "mechanism only; video throughput and use in October following not established"
+    },
+    {
+      "function": "Deterministic, bounded actuation",
+      "module_alone": "no",
+      "module_plus_robot": "yes, by contract",
+      "integration_asset": "seven-byte finite-pulse frame + STM32F407",
+      "evidence": "BOUNDARY_ISOLATION.md (trace-driven contract analysis)",
+      "status": "contract-derived, not a logic-analyser measurement"
+    }
+  ],
+  "conclusion": "The retired module alone supplies inference. Product functions appear only after sensing, deterministic actuation, orchestration and a new product role are designed around it. That joint value, not peak throughput, is what re-productization captures."
+}
