@@ -70,11 +70,13 @@ Please cite the paper, not this repository. A ready-made citation is in
 ## Status
 
 The arXiv v1 manuscript states that no public artifact repository is asserted.
-A v2 replacement package has been prepared that replaces that sentence with a
+A v2 replacement (arXiv submission `8364299`) replaces that sentence with a
 Data/Code Availability statement pointing to this repository at release
 `v1.0.0` and to the Zenodo version DOI `10.5281/zenodo.24152092`, and adds both
-links to the submission Comments. Until that replacement is announced, arXiv v1
-remains the public version.
+links to the submission Comments. **The replacement was submitted on
+2026-11-12 and is awaiting arXiv announcement**; until it is announced, arXiv
+v1 remains the public version and the DOI `10.48550/arXiv.2611.11698` is
+unchanged.
 
 The artifact archive is published on Zenodo
 (doi:[10.5281/zenodo.24152092](https://doi.org/10.5281/zenodo.24152092),
